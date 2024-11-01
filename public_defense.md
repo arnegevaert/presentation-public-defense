@@ -3,7 +3,7 @@
 See also: 3blue1brown manim tutorial!
 See also: manim slides! https://github.com/jeertmans/manim-slides
 
-## Preamble: 1m00s
+## Preamble: (1m00s)
 Voor we beginnen een kleine dienstmededeling: de presentatie gaat volledig in het Nederlands zijn,
 maar de slides zijn in het Engels, zodat de Engelstaligen onder ons ook kunnen volgen.
 Ik ga dit nu nog even meedelen aan de Engelstaligen, en dan kunnen we beginnen.
@@ -15,7 +15,7 @@ This is a once in a lifetime opportunity, so please forgive me for taking it.
 That being said, the slides are in English and I have added subtitles wherever possible,
 so you should be able to follow using the slides.
 
-## Introductie: 8m30s
+## Introductie: (8m30s)
 
 ### Intro part 1 (1m45s)
 Om te beginnen, moeten we even terug naar iedereen zijn/haar favoriete plek en meest dierbare herinnering:
@@ -466,17 +466,93 @@ Dat maakt al die methodes plots enorm veel makkelijker om te vergelijken:
 als we twee methodes met elkaar vergelijken,
 moeten we dus gewoon de 3 kenmerkende eigenschappen van die methodes naast elkaar leggen.
 
-## Functional decomposition
-- Gegeven simpele functie (polynomial) 2x1 + 4x2 - 3x1x2 + x3 + 5
-  - We kunnen deze functie schrijven als een som van functies die elk afhangen van een deelverzameling variabelen
-    - De componenten met 1 variabele zijn "directe effecten", de componenten met meerdere zijn "interacties"
-    - Voorbeeld van onze functie op een bepaald punt: we kunnen ieder component zien als een "bijdrage" van een (groep) veranderlijke(n)
-  - Dit is een *additieve decompositie* (decompositie: we splitsen de functie in deeltjes, additief: het is een som)
-    - De additieve decompositie is niet uniek: we kunnen termen naar boven verplaatsen
-    - Maar: we mogen termen niet "naar beneden" verplaatsen
-- Wat blijkt: iedere geldige additieve decompositie komt precies overeen met een manier van verwijderen P_S(f)
-  - Dus: iedere attributiemethode uit ons framework kunnen we verbinden met een additieve decompositie
-  - We kunnen "manier van verwijderen" vervangen door "manier van functie ontbinden"
+## Functional decomposition (6m00s)
+
+### FD part 1 (2m10s)
+Er is nog een belangrijk concept dat ik nog niet heb uitgelegd, en dat is *interactie.*
+Iedereen die kinderen heeft of ooit met kinderen heeft gewerkt, bijvoorbeeld in een jeugdbeweging, kent dit fenomeen.
+Stel, er zijn 2 kinderen, die we liefkozend Kind A en Kind B noemen.
+Kind A en Kind B zijn heel goede vrienden.
+Stel nu dat er een speelkamer vol legoblokken ligt, en die moeten opgeruimd worden.
+We hebben dan 4 mogelijke situaties.
+Als geen enkel kind opruimt, dan zijn er achteraf 0 legoblokken opgeruimd. Simpel.
+We kunnen dit schrijven als een functie l:
+als we de lege verzameling meegeven aan l, is de uitkomst 0 opgeruimde blokken.
+Als Kind A alleen opruimt, dan zijn er achteraf bijvoorbeeld 20 legoblokken opgeruimd.
+Dus: l(A) = 20.
+Dit noemen we ook het *direct effect* van Kind A.
+Op dezelfde manier ruimt Kind B bijvoorbeeld 25 blokken op: l(B) = 25.
+Maar, wat gaat er gebeuren als we Kind A en Kind B samen in de speelkamer plaatsen?
+Volgens mij gaan er bitter weinig blokken opgeruimd zijn.
+In dit geval is het aantal opgeruimde blokken 5, dus l(A,B) = 5.
+
+Wat er gebeurt in deze situatie is een *interactie,* meer bepaald een interactie tussen Kind A en Kind B
+waardoor het aantal opgeruimde blokken drastisch daalt.
+Wiskundig gezien krijgen we dat l(A,B) kleiner is dan l(A) + l(B),
+het aantal blokken dat ze samen opruimen is kleiner dan de som van het aantal blokken die ze elk apart opruimen.
+Dit verschil, namelijk 5 - (20 + 25) = -40, is het *interactie-effect* van het samenplaatsen van de 2 kinderen.
+Door de 2 kinderen te laten interageren, hebben we het aantal opgeruimde blokken doen dalen met 40.
+
+### FD part 2 (2m20s)
+Wat heeft dat nu te maken met attributie?
+Wel, herinner u het voorbeeld van het diabetesmodel.
+Daar zagen we dat het verwijderen van de veranderlijken cholesterol of bloeddruk apart geen effect had op de uitvoer,
+maar als we ze samen verwijderen is er wel een effect.
+Dit betekent dat er een *interactie* is tussen die twee veranderlijken,
+waardoor we ze niet in isolatie kunnen bekijken.
+
+Er is een fundamentele link tussen het verwijderen van veranderlijken en interacties tussen die veranderlijken.
+Laten we eens kijken naar een voorbeeld.
+Hier is een functie met 3 veranderlijken. *(f = 2x1 + 4x2 - 3x1x2 + x3 + 5)*
+Stel dat we kiezen om veranderlijken te verwijderen door ze op 0 te zetten.
+Wat is dan de uitvoer van f als we geen enkele variabele kennen, oftewel, als alle variabelen verwijderd zijn?
+We zetten alle variabelen op 0, en we krijgen: 5.
+Wat is nu de uitvoer van f als we enkel de variabele x1 kennen?
+Dit kunnen we berekenen door alle andere variabelen te verwijderen, zodat enkel x1 overschiet.
+We krijgen nu: 2x1 + 5.
+Het verschil tussen die twee functies, 2x1, is dan het *direct effect* van x1 op onze functie.
+Dit is zoals "Kind 1" dat apart blokken opruimt.
+
+We kunnen hetzelfde doen voor x2 en x3, en we krijgen 4x2 voor x2,
+en x3 voor x3.
+We hebben nu de "directe effecten" van alle drie de variabelen.
+Hoe kunnen we nu de interacties tussen de variabelen meten?
+Wel, in het voorbeeld van de kinderen was de interactie tussen Kind A en Kind B het verschil
+tussen hun effect als groep, en de som van hun aparte, directe effecten.
+We kunnen dit hier ook doen:
+om de interactie tussen x1 en x2 te meten, kunnen we het effect van x1 en x2 samen definieren
+door alle andere variabelen te verwijderen,
+en opnieuw die waarde 5 af te trekken die we krijgen als er geen enkele variabele gekend is.
+We krijgen: 2x1 + 4x2 - 3x1x2.
+Nu kunnen we kijken naar de som van de directe effecten van x1 en x2, dit is 2x1 + 4x2.
+Het verschil is dus: -3x1x2.
+Met andere woorden, het interactie-effect tussen x1 en x2 is -3x1x2.
+
+### FD part 3 (1m30s)
+Wat hebben we nu zojuist gedaan?
+We hebben de functie f gesplitst in een som van kleinere functies.
+Elk van deze kleinere functies is afhankelijk van een deelverzameling van de variabelen,
+en de precieze manier waarop we f gesplitst hebben
+is volledig bepaald door de manier waarop we variabelen verwijderen uit f.
+We noemen dit een *additieve decompositie* van f:
+"decompositie" omdat we f splitsen in deeltjes,
+en "additief" omdat de som van die deeltjes gelijk is aan f.
+
+Nu blijkt dat iedere functie die je kan verzinnen op een gelijkaardige manier gesplitst kan worden
+in een som van zo'n kleinere deelfuncties.
+Daarnet heb ik nog uitgelegd dat,
+om een attributiemethode te ontwerpen,
+we een manier moeten kiezen om variabelen te verwijderen uit een model.
+Wel, in mijn doctoraat heb ik aangetoond dat iedere mogelijke manier om variabelen te verwijderen uit een model,
+precies overeenkomt met een additieve decompositie van dat model.
+Dat wil dus zeggen dat al die tientallen attributiemethoden waarvan ik daarnet zei
+dat ze samengevat kunnen worden met 3 keuzes,
+eigenlijk achter de schermen een decompositie maken van het model f,
+ook al hadden de originele uitvinders van die methoden dat eigenlijk niet zo bedoeld.
+Met andere woorden, als we kijken naar de 3 ingredienten van een attributiemethode,
+dan kunnen we eigenlijk ingredient 2,
+een manier om variabelen te verwijderen,
+vervangen door: een manier om een model op te splitsen in additieve deeltjes.
 
 ## PDD-SHAP
 - Wat is daar nu het praktisch nut van?
@@ -503,10 +579,3 @@ Results: R2, speed.
 - Benchmark => geen universele maat van "kwaliteit"
 - Decompositie => we kunnen verschillende methodes vergelijken met elkaar door ze onder hetzelfde raamwerk te brengen
 - PDD-SHAP => we kunnen dit raamwerk gebruiken om bestaande verklaringen sneller te berekenen
-
-
-
-
-
-
-
