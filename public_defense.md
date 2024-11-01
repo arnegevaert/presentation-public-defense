@@ -46,7 +46,7 @@ Hier zien we onze twee punten terug, die komen elk overeen met een invoer (links
 en de bijhorende uitvoer (de hoogte).
 Als we dit herhalen voor alle getallen, krijgen we deze lijn te zien.
 
-### Intro part 2 (2m30s)
+### Intro part 2 ~~(2m30s)~~
 Laten we nog eens kijken naar onze formule.
 Er zijn twee getallen die onze formule eigenlijk vastleggen: die 2 en die -1.
 Als we een beetje prutsen aan die 2, dan zien we dat de richting van onze lijn verandert.
@@ -87,19 +87,90 @@ En dat klopt, maar dat gaat niet altijd lukken.
 Stel bijvoorbeeld dat we niet alleen de temperatuur bijhouden,
 maar ook hoeveel mensen er thuis zijn,
 en hoe hard de zon schijnt, want er liggen zonnepanelen op ons dak.
-Nu kunnen we niet meer zo'n grafiekje tekenen, maar voor de computer is dit geen probleem.
+Nu moeten we dus 3 getallen meegeven als invoer aan het model in plaats van 1.
+Die 3 getallen noemen we ook de *invoerveranderlijken.*
+Met 3 invoerveranderlijken kunnen we niet meer een grafiekje tekenen zoals daarnet,
+maar voor de computer is dit geen probleem.
 
-### Intro part 3
+### Intro part 3 (3m00s)
+De functie waarvan we de parameters door de computer laten zoeken,
+noemen we ook een *model.*
+Het leuke aan dit model is dat we gewoon kunnen kijken naar de "programmacode",
+namelijk de vergelijking,
+en dus kunnen zien wat dit model "doet."
+We zien bijvoorbeeld dat de parameters voor temperatuur en zon negatief zijn:
+hoe warmer en hoe meer zon, hoe minder energieverbruik.
+De parameter voor aantal personen is positief:
+hoe meer mensen thuis, hoe meer energieverbruik.
+
+Er is wel nog een probleempje met ons model.
+Om dat te zien, gaan we eventjes terug naar een model met maar 1 invoergetal,
+zodat we ons grafiekje kunnen zien.
+Ons model kan enkel rechte lijnen tekenen.
+Dat gaat niet altijd voldoende zijn, en je kan het hier eigenlijk ook al zien:
+als het buiten voldoende warm wordt,
+dan gaan we zogezegd negatieve energie verbruiken.
+Met zonnepanelen kan dat misschien nog in principe,
+maar als we bijvoorbeeld airco in huis hebben en buiten is het 40 graden,
+dan denk ik dat ons energieverbruik opnieuw omhoog gaat gaan.
+
+Als onze punten geen mooie rechte lijn vormen,
+dan kunnen we ons model flexibeler maken door parameters toe te voegen.
+Stel bijvoorbeeld dat onze data er zo uitziet. *(kwadratisch)*
+We kunnen hier niet echt een rechte lijn door tekenen,
+maar als we een parameter toevoegen aan onze functie,
+dan lukt het wel: nu kan onze functie rechte lijnen en dit soort kromme lijnen tekenen.
+Maar: nu moeten we wel 3 parameters laten kiezen door de computer,
+en onze formule wordt ook een beetje moeilijker om te interpreteren.
+
+Stel nu dat onze data er zo uitziet. *(complexe data, NN example)*
+We kunnen opnieuw een functie maken en de parameters laten kiezen door de computer,
+en dat ziet er dan zo uit.
+Laten we nu eens kijken naar de programmacode van onze functie.
+Oei, er is precies iets verkeerd met mijn slides...
+Ah nee, ok.
+Welke functie is dit? 
+Dit is een *neuraal netwerk,* een speciaal soort functie dat we veel gebruiken in machine learning
+en waarvan we kunnen kiezen hoeveel parameters het heeft.
+Hoe meer parameters, hoe complexer de vormen die de functie kan tekenen.
+Dit neuraal netwerk heeft 100 parameters, en we zien dus dat het redelijk moeilijk wordt
+om de formule echt te verstaan.
+
+Hoeveel parameters zitten er dan in een "echt" machine learning-model, zoals ChatGPT?
+Toen ChatGPT 2 jaar geleden uitkwam, gebruikte dat het GPT3.5-model.
+Dat model heeft *175* parameters.
+Sorry, 175 *miljard* parameters.
+Hoeveel parameters er in de nieuwste versie zitten, willen de makers ons niet vertellen,
+maar het wordt geschat rond de 100 *biljoen*, dus nog eens ongeveer 1000 keer zoveel.
+
+### Intro part 4
+Als we alle 100 biljoen parameters van ChatGPT op standaard A4 printerpapier zouden zetten,
+dan zou de stapel papier ongeveer 25000km hoog zijn,
+oftewel ongeveer vijf keer de afstand van deze zaal tot in Tashkent,
+de hoofdstad van Oezbekistan.
+Zo'n groot model kunnen we natuurlijk niet meer verstaan door naar de formule te kijken.
+
+Wat we wel nog kunnen doen, is het model beschouwen als een soort zwarte doos,
+waar we invoer aan kunnen geven en uitvoer van terugkrijgen.
+Het is nog altijd gewoon een functie.
+We kunnen dus nog altijd een beetje prutsen aan de invoerwaarden,
+en zien hoe de uitvoer verandert.
+Als we prutsen aan een bepaalde invoer en de uitvoer verandert sterk,
+dan kunnen we zeggen dat die invoer een sterke invloed heeft.
+Als we eraan prutsen en de uitvoer blijft gelijk,
+dan is die invoer misschien niet zo belangrijk.
+
+Zo'n manier van inzicht kweken in een model
+noemen we een *attributie-gebaseerde verklaring*,
+of gewoon *attributies.*
+Wiskundig gezien komt het erop neer dat we, op een of andere manier,
+een score berekenen voor iedere invoerveranderlijke
+die ons zegt hoe *belangrijk* die veranderlijke is.
+In ons voorbeeld van daarnet konden we de parameters zelf beschouwen als attributies,
+want die zeggen ons wat de invloed is van iedere veranderlijke op de uitvoer.
 
 
 
-
-
-
-- Wat als we meerdere veranderlijken hebben (3 veranderlijken, 1 kwadratisch)?
-  - Kunnen nu niet meer plotten maar we kunnen wel nog kijken naar de formule.
-  - Door te kijken naar de formule kunnen we zien wat onze machine "doet"
-    - Bvb feature A heeft precies niet zo veel invloed als B
 - Een "echt" machine learning model, ook ChatGPT,
   ook de modellen die uit een foto kunnen herkennen of er een persoon op staat
   en wie die persoon is, is ook gewoon een functie met een bepaalde formule!
@@ -107,19 +178,7 @@ Nu kunnen we niet meer zo'n grafiekje tekenen, maar voor de computer is dit geen
   - De outputs zijn bvb "1" als de foto een persoon bevat en "0" als de foto geen persoon bevat
   - => Het doet er niet toe wat de data precies is,
     we kunnen altijd doen alsof het gewoon een lijst van getallen is.
-- We keren even terug naar 2d plots
-  - Wat als de data wat complexer is (kwadratisch)?
-    - Lineaire fit werkt nog in principe, maar benadering is niet goed
-    - Parameter toevoegen helpt
-    - We kunnen nog altijd de formule gebruiken als een beschrijving van de "programmacode"
-    - Waarom x^2 toevoegen en niet x^3, de sinus van x, of nog iets anders?
-      - Het is de taak van de programmeur om de goeie "vorm" (model) te kiezen voor de data
-  - Wat als de data nog complexer wordt? (piecewise combinatie van functies)
-    - We voegen nog parameters toe, en het werkt terug.
-    - Laten we kijken naar de programmacode...
-      - Veel te veel parameters.
-      - Dit zijn $n$ parameters. Resnet18, een redelijk klein model voor computervisie, heeft $N$ parameters!
-        - Enkele fun facts over hoe gigantisch de "programmacode" is van resnet18.
+
 - Conclusie: we kunnen een "echt" ML model enkel beschouwen als een "black box".
 - Hoe kunnen we toch nog inzicht krijgen?
   - Door te kijken naar hoe de black box zich gedraagt met verschillende inputs
@@ -133,6 +192,8 @@ Nu kunnen we niet meer zo'n grafiekje tekenen, maar voor de computer is dit geen
      **hoe kunnen we weten welke methode de beste is voor een bepaalde toepassing?**
 
 ## Benchmark
+
+- Image classification
 - Eerste grote experiment.
 - Er bestaan enorm veel manieren om een "heatmap" te maken voor een bepaalde predictie
   - Allemaal gebaseerd op speciale wiskundige technieken waar we nu niet op hoeven ingaan
