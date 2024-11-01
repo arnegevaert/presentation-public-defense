@@ -46,14 +46,14 @@ Hier zien we onze twee punten terug, die komen elk overeen met een invoer (links
 en de bijhorende uitvoer (de hoogte).
 Als we dit herhalen voor alle getallen, krijgen we deze lijn te zien.
 
-### Intro part 2
+### Intro part 2 (2m30s)
 Laten we nog eens kijken naar onze formule.
 Er zijn twee getallen die onze formule eigenlijk vastleggen: die 2 en die -1.
 Als we een beetje prutsen aan die 2, dan zien we dat de richting van onze lijn verandert.
 Als we prutsen aan die -1, dan gaat onze lijn naar boven en beneden.
 Die 2 en die -1, we noemen die ook *parameters.*
 
-Machine learning, of machinaal leren, is eigenlijk niets anders dan de computer 
+Machine learning, is eigenlijk niets anders dan de computer 
 automatisch laten zoeken naar een goeie waarde van die parameters
 zodat onze functie voor iets nuttigs gebruikt kan worden.
 Wat bedoel ik daarmee?
@@ -65,20 +65,37 @@ Wat we kunnen doen, is op een aantal dagen meten hoe warm het buiten is,
 dat is onze X-as,
 en dan meten hoeveel energie we hebben verbruikt.
 Hier heb ik dat gedaan voor 6 dagen, dus we hebben 6 punten op onze grafiek.
+Stel nu dat het weerbericht zegt dat het morgen 20 graden gaat worden.
+Ik wil graag voorspellen hoeveel energie ik morgen ga verbruiken.
+We kunnen dat doen door een lijn te trekken die zo mooi mogelijk door deze data loopt,
+en dan te kijken hoe hoog de lijn is op temperatuur 20.
+
+We starten met een willekeurige waarde voor de 2 parameters.
+Dat geeft ons deze lijn, die duidelijk geen goede beschrijving is van de data.
+We kunnen ook uitdrukken hoe slecht die lijn is met een *foutfunctie.*
+Hoe die foutfunctie werkt, doet er nu even niet toe.
+Alles wat we moeten weten is, hoe slechter de lijn, hoe groter de foutfunctie.
+
+Nu hebben we alles wat we nodig hebben om machine learning te doen.
+We moeten gewoon zeggen aan de computer,
+ga op zoek naar parameterwaarden die ervoor zorgen dat die foutfunctie zo klein mogelijk is.
+Laten we dat eens doen, en voila, de lijn gaat mooi door de data.
+We zien ook dat de foutfunctie nu veel kleiner is dan daarnet.
+
+Nu denk je misschien, maar allez, we hadden die lijn nu toch ook wel met het blote oog kunnen tekenen.
+En dat klopt, maar dat gaat niet altijd lukken.
+Stel bijvoorbeeld dat we niet alleen de temperatuur bijhouden,
+maar ook hoeveel mensen er thuis zijn,
+en hoe hard de zon schijnt, want er liggen zonnepanelen op ons dak.
+Nu kunnen we niet meer zo'n grafiekje tekenen, maar voor de computer is dit geen probleem.
+
+### Intro part 3
 
 
 
 
-- Lineaire functie in 1 veranderlijke
-  - De formule vat samen wat de functie doet. Dit zijn de "instructies" van de machine
-  - De formule heeft 2 parameters die we kunnen veranderen (slope, intercept)
-  - Machine learning = automatisch zoeken naar de parameters zodat de machine de gegeven data
-    zo goed mogelijk kan benaderen
-    - Hoe definieren we "zo goed mogelijk"? We krijgen een getal dat de "fout" (loss) weergeeft,
-      hoe kleiner dit getal hoe beter.
-  - Demonstratie: van random parameters naar mooie fit op lineaire data
-- Wat als we 2 veranderlijken hebben?
-  - Voorbeeld van surface plot (lineair), dit lukt nog, maar wordt al moeilijker
+
+
 - Wat als we meerdere veranderlijken hebben (3 veranderlijken, 1 kwadratisch)?
   - Kunnen nu niet meer plotten maar we kunnen wel nog kijken naar de formule.
   - Door te kijken naar de formule kunnen we zien wat onze machine "doet"
