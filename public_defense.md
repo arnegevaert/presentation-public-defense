@@ -15,7 +15,7 @@ This is a once in a lifetime opportunity, so please forgive me for taking it.
 That being said, the slides are in English and I have added subtitles wherever possible,
 so you should be able to follow using the slides.
 
-## Introductie: 9m00s
+## Introductie: 8m30s
 
 ### Intro part 1 (1m45s)
 Om te beginnen, moeten we even terug naar iedereen zijn/haar favoriete plek en meest dierbare herinnering:
@@ -46,14 +46,14 @@ Hier zien we onze twee punten terug, die komen elk overeen met een invoer (links
 en de bijhorende uitvoer (de hoogte).
 Als we dit herhalen voor alle getallen, krijgen we deze lijn te zien.
 
-### Intro part 2 (2m40s)
+### Intro part 2 (2m30s)
 Laten we nog eens kijken naar onze formule.
 Er zijn twee getallen die onze formule eigenlijk vastleggen: die 2 en die -1.
 Als we een beetje prutsen aan die 2, dan zien we dat de richting van onze lijn verandert.
 Als we prutsen aan die -1, dan gaat onze lijn naar boven en beneden.
 Die 2 en die -1, we noemen die ook *parameters.*
 
-Machine learning, is eigenlijk niets anders dan de computer 
+Machine learning is eigenlijk niets anders dan de computer 
 automatisch laten zoeken naar een goeie waarde van die parameters
 zodat onze functie voor iets nuttigs gebruikt kan worden.
 Wat bedoel ik daarmee?
@@ -82,6 +82,8 @@ ga op zoek naar parameterwaarden die ervoor zorgen dat die foutfunctie zo klein 
 Dat noemen we ook *trainen.*
 Laten we dat eens doen, en voila, de lijn gaat mooi door de data.
 We zien ook dat de foutfunctie nu veel kleiner is dan daarnet.
+Zo'n functie waarvan de computer zelf de parameters heeft gekozen,
+noemen we in machine learning ook een *model.*
 
 Nu denk je misschien, maar allez, we hadden die lijn nu toch ook wel met het blote oog kunnen tekenen.
 En dat klopt, maar dat gaat niet altijd lukken.
@@ -93,9 +95,7 @@ Die 3 getallen noemen we ook de *invoerveranderlijken.*
 Met 3 invoerveranderlijken kunnen we niet meer een grafiekje tekenen zoals daarnet,
 maar voor de computer is dit geen probleem.
 
-### Intro part 3 (3m00s)
-De functie waarvan we de parameters door de computer laten zoeken,
-noemen we ook een *model.*
+### Intro part 3 (2m45s)
 Het leuke aan dit model is dat we gewoon kunnen kijken naar de "programmacode",
 namelijk de vergelijking,
 en dus kunnen zien wat dit model "doet."
@@ -119,21 +119,21 @@ Als onze punten geen mooie rechte lijn vormen,
 dan kunnen we ons model flexibeler maken door parameters toe te voegen.
 Stel bijvoorbeeld dat onze data er zo uitziet. *(kwadratisch)*
 We kunnen hier niet echt een rechte lijn door tekenen,
-maar als we een parameter toevoegen aan onze functie,
-dan lukt het wel: nu kan onze functie rechte lijnen en dit soort kromme lijnen tekenen.
+maar als we een parameter toevoegen aan ons model,
+dan lukt het wel: nu kan ons model rechte lijnen en dit soort kromme lijnen tekenen.
 Maar: nu moeten we wel 3 parameters laten kiezen door de computer,
 en onze formule wordt ook een beetje moeilijker om te interpreteren.
 
 Stel nu dat onze data er zo uitziet. *(complexe data, NN example)*
-We kunnen opnieuw een functie maken en de parameters laten kiezen door de computer,
+We kunnen opnieuw een model maken en de parameters laten kiezen door de computer,
 en dat ziet er dan zo uit.
-Laten we nu eens kijken naar de programmacode van onze functie.
+Laten we nu eens kijken naar de programmacode van ons model.
 Oei, er is precies iets verkeerd met mijn slides...
 Ah nee, ok.
-Welke functie is dit? 
-Dit is een *neuraal netwerk,* een speciaal soort functie dat we veel gebruiken in machine learning
+Wat voor model is dit? 
+Dit is een *neuraal netwerk,* een speciaal soort model dat we veel gebruiken in machine learning
 en waarvan we kunnen kiezen hoeveel parameters het heeft.
-Hoe meer parameters, hoe complexer de vormen die de functie kan tekenen.
+Hoe meer parameters, hoe complexer de vormen die het model kan tekenen.
 Dit neuraal netwerk heeft 100 parameters, en we zien dus dat het redelijk moeilijk wordt
 om de formule echt te verstaan.
 
@@ -184,11 +184,11 @@ Als we dus een model maken dat die uitvoerwaarde kan voorspellen,
 dan hebben we in feite een programma dat automatisch kan "zien"
 welk cijfer er in een foto staat.
 
-Nu vraag je je misschien af, hoe kan ik zo'n foto als invoer geven aan een functie?
+Nu vraag je je misschien af, hoe kan ik zo'n foto als invoer geven aan een model?
 Simpel: iedere pixel in de foto is een getal dat weergeeft hoe helder die pixel is.
 In een kleurenfoto is iedere pixel 3 getallen: de hoeveelheid rood, groen en blauw in de pixel.
 Dus als we zoals hier een klein zwart-wit fotootje hebben van 28 op 28 pixels,
-dan heeft onze functie 784 invoerveranderlijken nodig.
+dan heeft ons model 784 invoerveranderlijken nodig.
 
 Attributies zijn heel handig in dit geval.
 Waarom? Omdat iedere invoerveranderlijke, dus iedere pixel, een score krijgt.
@@ -275,40 +275,196 @@ We kunnen de "correctheid" niet uitdrukken in 1 simpel getal.
 De vraag is nu, wat zijn die onderliggende eigenschappen precies?
 Hoe kunnen we de verschillende attributiemethodes met elkaar vergelijken?
 
-## Removal-based attribution methods
+## Removal-based attribution methods (12m15s)
 
-- Stel: tabular model dat risico op diabetes moet bepalen obv lengte, leeftijd, geslacht, bloeddruk.
-- We willen schatten hoe belangrijk iedere veranderlijke is.
-  - De eerste vraag die we moeten beantwoorden is: voor wat?
-    - bv: hoe gevoelig is het model aan iedere veranderlijke?
-    - of: hoe nuttig is iedere veranderlijke voor de accuraatheid van ons model?
-    - of: voor een bepaalde patient en predictie, hoe belangrijk is iedere veranderlijke voor die patient?
-  - **Ingredient 1** van een verklaring: het **doelwit.**
-- Stel nu: we hebben 1 patient met een predictie, en we willen weten hoe belangrijk de variabelen zijn voor die predictie.
-  - Ons "doelwit" is gekozen.
-  - Stel dat we willen weten hoe belangrijk "leeftijd" was.
-    - Het liefst zouden we vragen aan het model: *Als we leeftijd niet kenden, wat zou dan je predictie zijn?*
-      - Probleem: we moeten een waarde meegeven aan de functie.
-      - Kunnen we een "lege waarde" meegeven? Op 0 zetten?
-        - Probleem: dit is niet een "lege waarde", dit is "een pasgeboren baby"... Er zitten wss geen mensen met leeftijd 0 in de data
-      - We kunnen alle waarden voor "leeftijd" eens invullen en kijken naar de gemiddelde uitvoer?
-        - Probleem: dan krijgen we nog steeds rare combinaties, bvb 12-jarig kind met cholesterol van een 40-jarige *(todo beter voorbeeld?)*
-      - Er zijn enorm veel manieren om een veranderlijke te "verwijderen", elk met voor- en nadelen.
-      - **Ingredient 2** van een verklaring: de manier om variabelen te **verwijderen.**
-- Stel nu: ons model is heel simpel, het voorspelt een verhoogde kans als x1 > a OF x2 > b.
-  - Wat gaat onze simpele methode doen? Geen enkele variabele zal belangrijk zijn!
-  - We mogen niet alleen kijken naar iedere variabele apart, maar we moeten ook kijken naar verzamelingen.
-    - Dit is een voorbeeld van *interactie:* het effect van de twee variabelen samen is anders dan de som van het effect van de aparte veranderlijken.
-  - Voor 4 variabelen hebben we 16 mogelijke deelverzamelingen
-  - Hoe brengen we dit terug naar 1 score per veranderlijke?
-  - **Ingredient 3** van een verklaring: de manier om de output van groepen van veranderlijken **terug samen te voegen** in 1 score per veranderlijke.
-- We kunnen dit formeler maken.
-  - Doelwit: Phi(f)
-  - Verwijderen: P_S(f)
-  - Aggregeren: alpha
-- **Contributie:** we kunnen heel veel bestaande technieken onder deze noemer brengen
-  - Dit maakt verschillende methodes plots makkelijker vergelijkbaar
-    - Bvb methode A en B verschillen enkel in hoe ze veranderlijken verwijderen
+### RBAM part 1 (2m00s)
+Laten we even een stapje terug nemen, en nadenken hoe we attributies kunnen berekenen.
+Stel dat we een model hebben dat voorspelt of iemand een hoog of laag risico heeft op diabetes,
+op basis van lengte, gewicht, leeftijd, bloeddruk en cholesterol.
+We hebben dit model getraind door deze 5 eigenschappen van een hoop mensen te meten,
+dat zijn de invoerveranderlijken,
+en dan na te gaan of die mensen diabetes hebben,
+dat is de uitvoer.
+Dan hebben we, net zoals in het begin van de presentatie,
+aan de computer gevraagd om de parameters van het model zo in te vullen
+dat de uitvoer overeenkomt met de kans op diabetes,
+gegeven de 5 metingen van de patient.
+Onze attributies gaan dus moeten aanduiden hoe belangrijk elk van deze 5 invoervariabelen nu is.
+
+De eerste keuze die we moeten maken is:
+waarvoor precies willen we de attributies berekenen?
+Willen we dat de attributies ons tonen hoe belangrijk iedere invoervariabele is
+voor een specifieke persoon,
+zoals bij de foto's van daarnet,
+of willen we weten hoe belangrijk iedere variabele is voor het model in het algemeen,
+zoals bij ons voorbeeld van het energieverbruik?
+We kunnen bijvoorbeeld ook kiezen om te meten hoe belangrijk iedere variabele is voor
+de *correctheid* van ons model,
+herinner u de foutfunctie die zegt hoe "goed" het model is in het voorspellen van de data.
+Een veranderlijke kan bijvoorbeeld een positieve invloed hebben op de uitvoer van het model,
+met andere woorden,
+als we de waarde van de veranderlijke verhogen, gaat de uitvoer ook omhoog,
+maar dezelfde veranderlijke kan tegelijk een negatieve invloed hebben op hoe correct het model is,
+met andere woorden,
+als we de waarde verhogen, wordt de voorspelling van het model minder juist.
+Deze keuze is het eerste ingredient van onze attributiemethode: het **doelwit,**
+oftewel, waarvoor precies willen we een verklaring?
+
+### RBAM part 2 (3m00s)
+Stel nu dat we een patient hebben waarvoor het model zegt dat er een hoog risico is op diabetes,
+en we willen dat onze attributies ons tonen hoe belangrijk iedere variabele is voor die voorspelling.
+Met andere woorden, ons doelwit is gekozen: het is de uitvoer van het model voor deze specifieke patient.
+Wat kunnen we dan doen om bijvoorbeeld te meten hoe belangrijk de veranderlijke "leeftijd" is voor die voorspelling?
+Het liefst zouden we eigenlijk vragen aan het model: *als we leeftijd niet zouden kennen, wat zou dan je voorspelling zijn?*
+Als we dat zouden kunnen doen, dan kunnen we kijken naar hoe hard de voorspelling verandert,
+en als die veel verandert, dan is de leeftijd blijkbaar belangrijk.
+
+Jammer genoeg werkt dat niet, want we kunnen niet zomaar een variabele niet invullen in het model.
+Ons model kan ons dan geen uitvoer geven.
+We moeten dit probleem dus proberen te omzeilen.
+Een eerste idee zou bijvoorbeeld kunnen zijn om de waarde 0 mee te geven als leeftijd.
+Maar dat lost het probleem niet echt op.
+Wij zouden dat misschien kunnen interpreteren als "geen leeftijd",
+maar ons model weet dat niet.
+Voor ons model is dit gewoon een pasgeboren baby... van 85kg en 195cm.
+Waarschijnlijk heeft het model niet veel zo'n pasgeboren baby's gezien in zijn data.
+
+Een andere manier kan bijvoorbeeld zijn om niet 1 waarde in te vullen voor leeftijd,
+maar alle mogelijke waarden die we gezien hebben in de data.
+Als we bijvoorbeeld 1000 patienten hadden in de data, dan berekenen we de uitvoer van het model 1000 keer,
+telkens voor een andere leeftijd.
+Dan kunnen we kijken naar de gemiddelde uitvoer van het model op die 1000 voorbeelden,
+en zien of dat veel verschilt van de uitvoer op de oorspronkelijke patient.
+Dit is al beter en wordt in het echt ook veel gedaan,
+maar het is nog altijd niet perfect:
+we kunnen namelijk nog altijd rare combinaties krijgen.
+Als er in onze dataset bijvoorbeeld ook kinderen zaten, dan gaan we hier patienten verzonnen hebben
+die bijvoorbeeld 9 jaar oud zijn, maar toch 195cm lang.
+Het probleem daarmee is dat ons model waarschijnlijk nooit zo'n lange kinderen gezien heeft in de data.
+Als we dan toch zo'n extreem lang kind meegeven aan het model,
+dan hebben veel modellen de neiging om extreme, willekeurige uitvoerwaarden terug te geven.
+Dat kan dus een invloed hebben op ons gemiddelde.
+
+Er bestaan nog veel meer gesofisticeerde manieren om dit probleem op te lossen,
+en elk van die manieren heeft zijn voor- en nadelen.
+Maar over het algemeen proberen we telkens hetzelfde te doen:
+we proberen een variabele uit de invoer te **verwijderen.**
+Dit is het tweede ingredient van onze attributiemethode.
+
+### RBAM part 3 (2m15s)
+Stel nu dat we een methode hebben gekozen om variabelen te verwijderen,
+bijvoorbeeld door het gemiddelde te nemen over de waarden in de dataset.
+Het probleem van de buitenaards lange kinderen laten we eventjes voor wat het is.
+Nu kunnen we attributies berekenen:
+we verwijderen elk om beurt iedere invoervariabele,
+en kijken naar het verschil in uitvoer.
+Dit verschil in uitvoer is dan onze attributiescore voor die variabele. Top!
+
+Maar ik vrees dat we nog altijd niet helemaal klaar zijn.
+Stel dat ons model eigenlijk heel simpel is: het voorspelt een verhoogde kans als
+de cholesterol hoger is dan 100 of de bloeddruk hoger is dan 130.
+Inderdaad, onze patient heeft een cholesterol van 110 en een bloeddruk van 135.
+Maar wat gaat er gebeuren als we onze attributies berekenen?
+Als we cholesterol "verwijderen", dan gaan we allemaal verschillende waarden invullen,
+maar dit gaat de uitvoer nooit veranderen,
+want de bloeddruk is nog altijd 135.
+Als we bloeddruk "verwijderen", gaat de uitvoer ook nooit veranderen,
+want de cholesterol is nog altijd 110.
+Met andere woorden, onze attributies gaan zeggen dat *geen enkele* veranderlijke belangrijk was!
+
+Wat is er hier misgelopen?
+Het probleem is dat we naar iedere veranderlijke individueel kijken,
+terwijl het model naar cholesterol en bloeddruk *tegelijk* kijkt.
+Wat we dus eigenlijk zouden moeten doen,
+is niet alleen iedere veranderlijke apart verwijderen,
+maar ook alle mogelijke groepen van veranderlijken verwijderen.
+Dat kunnen we natuurlijk doen, maar dan hebben we een nieuw probleem:
+voor 5 veranderlijken zijn er 32 mogelijke groepen (of deelverzamelingen).
+We hebben nu dus 32 uitvoerwaarden voor die 5 veranderlijken.
+We moeten dus nog op een of andere manier die 32 uitvoerwaarden "samenvatten" in 5 scores,
+namelijk 1 voor iedere veranderlijke.
+Dit is het derde en laatste ingredient van onze attributiemethode:
+de manier van **aggregeren,**
+of met andere woorden:
+hoe vatten we de 32 uitvoerwaarden samen in 5 scores.
+
+### RBAM part 4 (1m30s)
+We hebben dus 3 ingredienten voor een attributiemethode:
+het doelwit, waar we precies een verklaring voor willen maken,
+een manier om veranderlijken te verwijderen uit het model,
+en een manier om de waarden samen te vatten in 5 scores.
+Wat ik nu heb aangetoond in het tweede deel van mijn onderzoek is dat niet alle,
+maar wel een hele grote hoop bestaande attributiemethodes
+eigenlijk allemaal kunnen beschreven worden met die 3 keuzes.
+
+Ik heb dat natuurlijk iets formeler gedaan dan ik het tot nu toe heb uitgelegd.
+Maak je geen zorgen: deze formule zegt eigenlijk gewoon hetzelfde als wat ik tot nu toe heb verteld,
+maar dan in wiskundetaal.
+Er komt geen toets.
+
+Laten we eventjes stilstaan bij deze formule.
+Wat ik hier beschrijf is opnieuw een functie, en die functie is onze attributiemethode.
+We geven 3 veranderlijken mee aan onze functie:
+een model f, een veranderlijke i en een invoer x.
+Bijvoorbeeld, het model f kan ons model zijn van daarnet dat het risico op diabetes voorspelt
+op basis van 5 eigenschappen.
+De veranderlijke i daarnet was "leeftijd",
+en de invoer x was de lijst van 5 getallen die overeenkomt met onze patient.
+De uitvoer van deze functie is dan een score die zegt hoe belangrijk
+de leeftijd (i) van de patient (x) was voor de voorspelling van het model (f).
+
+### RBAM part 5 (3m30s)
+Laat ons nu eens kijken naar de rechterkant van de vergelijking.
+Hier is ons model f terug.
+We hebben hier een nieuw symbool: P_T(f).
+Die P_T, dat is opnieuw een functie.
+T is een deelverzameling van de variabelen.
+P_T is dan een speciale functie: deze neemt het model f, en geeft ons een nieuw model P_T(f) terug.
+Dit nieuw model is onafhankelijk van de variabelen in T.
+Met andere woorden, P_T *verwijdert* de variabelen in T uit f.
+Dat was ons tweede ingredient van daarnet.
+
+Rond die P_T(f) staat nog iets: Phi.
+Die Phi is, je raadt het misschien al, weer een functie.
+Deze functie neemt P_T(f), dus het model waaruit een aantal veranderlijken verwijderd zijn,
+en geeft ons opnieuw een functie terug.
+Dit komt overeen met het eerste ingredient van daarnet: het *doelwit.*
+Als we bijvoorbeeld een verklaring willen voor de correctheid van het model,
+dan zouden we voor Phi de foutfunctie kunnen kiezen.
+
+We hebben dus Phi(P_T(f)), en dat is de eigenschap van het model waar we een verklaring voor willen,
+nadat de veranderlijken in T zijn verwijderd.
+Dan blijven nog deze alpha's over.
+Die alpha's zijn... geen functies, maar gewoon getallen.
+Voor een gegeven verzameling T, vermenigvuldigen we alpha_T met die constructie Phi(P_T(f)),
+en dan nemen we de som over alle verzamelingen van veranderlijken T.
+Die alpha's zeggen ons dus hoe we de verschillende waarden voor de verzamelingen T
+moeten samenbrengen in 1 score per veranderlijke:
+dit is de manier van *aggregeren,*
+ons derde ingredient.
+
+We kunnen deze vergelijking dus zo samenvatten:
+voor iedere mogelijke groep van veranderlijken,
+verwijder die groep uit het model f,
+meet daarvan de eigenschap die ons interesseert (bijvoorbeeld de uitvoer, of de correctheid).
+Daarna vermenigvuldigen we elk van deze waarden met een bepaald getal en nemen we de som,
+en dat is onze attributiescore voor de veranderlijke i!
+
+Als je goed opgelet hebt, kan je misschien onze methode van daarnet herkennen.
+We waren geinteresseerd in de uitvoer van het model f zelf:
+dus Phi(f) geeft ons gewoon de functie f terug.
+We verwijderden variabelen door alle mogelijke waarden in te vullen en een gemiddelde te nemen van de uitvoer:
+dit is P_T.
+En we keken naar iedere variabele apart, dus de alpha's waren gewoon 0 voor alle verzamelingen met meerdere variabelen,
+en 1 voor de verzameling die overeenkomt met de variabele i.
+
+In mijn doctoraat heb ik nu wiskundig kunnen bewijzen
+dat tientallen attributiemethodes die in de laatste 10 a 15 jaar zijn uitgevonden,
+allemaal door andere mensen en met andere redeneringen erachter,
+allemaal gewoon te schrijven zijn als deze formule.
+Dat maakt al die methodes plots enorm veel makkelijker om te vergelijken:
+als we twee methodes met elkaar vergelijken,
+moeten we dus gewoon de 3 kenmerkende eigenschappen van die methodes naast elkaar leggen.
 
 ## Functional decomposition
 - Gegeven simpele functie (polynomial) 2x1 + 4x2 - 3x1x2 + x3 + 5
