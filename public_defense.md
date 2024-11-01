@@ -79,6 +79,7 @@ Alles wat we moeten weten is, hoe slechter de lijn, hoe groter de foutfunctie.
 Nu hebben we alles wat we nodig hebben om machine learning te doen.
 We moeten gewoon zeggen aan de computer,
 ga op zoek naar parameterwaarden die ervoor zorgen dat die foutfunctie zo klein mogelijk is.
+Dat noemen we ook *trainen.*
 Laten we dat eens doen, en voila, de lijn gaat mooi door de data.
 We zien ook dat de foutfunctie nu veel kleiner is dan daarnet.
 
@@ -169,7 +170,7 @@ die ons zegt hoe *belangrijk* die veranderlijke is.
 In ons voorbeeld van daarnet konden we de parameters zelf beschouwen als attributies,
 want die zeggen ons wat de invloed is van iedere veranderlijke op de uitvoer.
 
-## Benchmark
+## Benchmark (6m20s)
 
 ### Benchmark part 1 (3m20s)
 Dit brengt ons nu naar het eerste grote experiment dat ik gedaan heb voor mijn doctoraat.
@@ -224,36 +225,58 @@ Natuurlijk is dat redelijk zinloos,
 want als er al markeringen op de huid staan,
 dan is de diagnose al gebeurd en is de voorspelling van het model dus niet meer nuttig.
 
-### Benchmark part 2
+### Benchmark part 2 (3m)
 Er zijn heel veel mensen die onderzoek doen naar goeie manieren om zo'n attributies te berekenen,
 en dus zijn er heel veel manieren ontwikkeld om dat te doen.
+Al die manieren geven ons verschillende attributies.
+Dat geeft ons een nieuw probleem: welke methode moeten we nu gebruiken?
+Als we op een of andere manier de kwaliteit van de attributies zouden kunnen meten,
+dan kunnen we de beste methode eruit kiezen.
+Een simpele manier om de kwaliteit te meten is bijvoorbeeld:
+neem de 10% pixels met de hoogste scores in de foto, en vervang ze door een zwarte achtergrondkleur.
+Geef die foto mee aan het model, en kijk naar het verschil in de uitvoer.
+Als die pixels echt belangrijk waren, dan zou de uitvoer van het model ook sterk moeten veranderen
+als we ze zwart maken.
 
+Er zijn heel veel mensen die onderzoek doen naar goeie manieren om de kwaliteit van attributies te meten,
+en dus zijn er heel veel manieren ontwikkeld om dat te doen.
+Al die kwaliteitsmetrieken zijn ontworpen om te meten hoe *correct* de attributies zijn:
+zijn de "belangrijkste" pixels volgens de attributies ook echt belangrijk?
+Dat gaf ons een simpel idee:
+we verzamelen een paar datasets,
+een paar methoden om attributies te genereren,
+en een paar kwaliteitsmetrieken.
+Voor elk van de datasets maken we een model,
+genereren we attributies op een stuk of 100 foto's,
+en meten we de kwaliteit van die attributies.
 
+Hier zien we een deel van de resultaten van dat experiment.
+Elke grafiek komt overeen met een dataset.
+De kolommen zijn de methodes, de rijen de kwaliteitsmetrieken.
+De grootte en donkerheid van de groene vierkantjes toont,
+voor iedere methode en iedere metriek,
+hoe goed de kwaliteit is van die methode volgens die kwaliteitsmetriek.
 
+Wat zien we?
+De kwaliteit van attributies hangt af van de dataset waarop het model getraind is.
+Dat zegt ons dus dat we niet 1 methode kunnen aanduiden die de "beste" is en gewoon altijd die gebruiken.
+We komen er helaas niet zo gemakkelijk vanaf.
+Maar wat zien we nog: de kwaliteit van de attributies hangt ook af van de kwaliteitsmetriek!
+De ene metriek kan ons zeggen, attributiemethode A is beter dan attributiemethode B,
+terwijl de andere metriek juist het omgekeerde zegt.
+Dat is vreemd!
+Alle metrieken waren gemaakt om te meten *hoe correct* de attributies zijn.
+Hoe kan het dan dat ze elkaar tegenspreken?
 
-- Er bestaan enorm veel manieren om een "heatmap" te maken voor een bepaalde predictie
-  - Allemaal gebaseerd op speciale wiskundige technieken waar we nu niet op hoeven ingaan
-  - Allemaal ontworpen om te tonen *welke regio's in de foto het belangrijkst waren voor die ene predictie.*
-    - Waarom is dat nuttig? Zo kunnen we zien of het model echt geleerd heeft wat we willen dat het leert.
-    - Husky voorbeeld/meetlat voorbeeld.
-  - In veel gevallen genereren ze andere heatmaps.
-    - Probleem: welke is nu de juiste?
-- Simpele metriek: als we de 10% "belangrijkste" pixels vervangen door een grijs vierkant, verandert de predictie dan?
-- Er bestaan enorm veel andere manieren om de kwaliteit van een heatmap te meten
-  - Allemaal gebaseerd op speciale wiskundige technieken waar we nu niet op hoeven ingaan
-  - Allemaal ontworpen om te meten *hoe "correct" de heatmap is:* zijn de "belangrijkste" regio's ook echt belangrijk?
-- Simpele oefening:
-  - We verzamelen een aantal datasets met afbeeldingen
-  - We verzamelen een aantal methodes voor het genereren van heatmaps
-  - We verzamelen een aantal kwaliteitsmetrieken voor heatmaps
-  - We meten de kwaliteit van de verschillende heatmaps met de verschillende metrieken
-- Resultaat:
-  - "Beste" methode hangt af van de dataset...
-  - ... maar ook van de metriek!
-    - Conclusie: *er is niet 1 enkele maat van "correctheid".* 
-      De metrieken meten toch nog onderling verschillende eigenschappen van de heatmaps.
+De conclusie is:
+de kwaliteitsmetrieken meten toch verschillende eigenschappen van de attributies,
+en niet gewoon "de correctheid."
+We kunnen de "correctheid" niet uitdrukken in 1 simpel getal.
+De vraag is nu, wat zijn die onderliggende eigenschappen precies?
+Hoe kunnen we de verschillende attributiemethodes met elkaar vergelijken?
 
 ## Removal-based attribution methods
+
 - Stel: tabular model dat risico op diabetes moet bepalen obv lengte, leeftijd, geslacht, bloeddruk.
 - We willen schatten hoe belangrijk iedere veranderlijke is.
   - De eerste vraag die we moeten beantwoorden is: voor wat?
