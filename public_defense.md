@@ -15,7 +15,7 @@ This is a once in a lifetime opportunity, so please forgive me for taking it.
 That being said, the slides are in English and I have added subtitles wherever possible,
 so you should be able to follow using the slides.
 
-## Introductie
+## Introductie: 9m00s
 
 ### Intro part 1 (1m45s)
 Om te beginnen, moeten we even terug naar iedereen zijn/haar favoriete plek en meest dierbare herinnering:
@@ -46,7 +46,7 @@ Hier zien we onze twee punten terug, die komen elk overeen met een invoer (links
 en de bijhorende uitvoer (de hoogte).
 Als we dit herhalen voor alle getallen, krijgen we deze lijn te zien.
 
-### Intro part 2 ~~(2m30s)~~
+### Intro part 2 (2m40s)
 Laten we nog eens kijken naar onze formule.
 Er zijn twee getallen die onze formule eigenlijk vastleggen: die 2 en die -1.
 Als we een beetje prutsen aan die 2, dan zien we dat de richting van onze lijn verandert.
@@ -143,7 +143,7 @@ Sorry, 175 *miljard* parameters.
 Hoeveel parameters er in de nieuwste versie zitten, willen de makers ons niet vertellen,
 maar het wordt geschat rond de 100 *biljoen*, dus nog eens ongeveer 1000 keer zoveel.
 
-### Intro part 4
+### Intro part 4 (1m20s)
 Als we alle 100 biljoen parameters van ChatGPT op standaard A4 printerpapier zouden zetten,
 dan zou de stapel papier ongeveer 25000km hoog zijn,
 oftewel ongeveer vijf keer de afstand van deze zaal tot in Tashkent,
