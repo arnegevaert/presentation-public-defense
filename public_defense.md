@@ -169,32 +169,68 @@ die ons zegt hoe *belangrijk* die veranderlijke is.
 In ons voorbeeld van daarnet konden we de parameters zelf beschouwen als attributies,
 want die zeggen ons wat de invloed is van iedere veranderlijke op de uitvoer.
 
-
-
-- Een "echt" machine learning model, ook ChatGPT,
-  ook de modellen die uit een foto kunnen herkennen of er een persoon op staat
-  en wie die persoon is, is ook gewoon een functie met een bepaalde formule!
-  - De veranderlijken zijn bvb de pixels in een foto (3 getallen per pixel)
-  - De outputs zijn bvb "1" als de foto een persoon bevat en "0" als de foto geen persoon bevat
-  - => Het doet er niet toe wat de data precies is,
-    we kunnen altijd doen alsof het gewoon een lijst van getallen is.
-
-- Conclusie: we kunnen een "echt" ML model enkel beschouwen als een "black box".
-- Hoe kunnen we toch nog inzicht krijgen?
-  - Door te kijken naar hoe de black box zich gedraagt met verschillende inputs
-  - *Attribution-based explanation:* we produceren een score voor iedere invoerveranderlijke
-    - Die score zegt hoe belangrijk iedere veranderlijke was voor het model in deze predictie
-    - Als de invoer een foto is, kunnen we een heatmap tonen
-    - Als de invoer een simpele tabel is, kunnen we een barplot tonen
-- Er bestaan enorm veel methoden om "attribution-based explanations" te genereren
-  - Allemaal gebaseerd op speciale wiskundige technieken waar we nu niet op hoeven ingaan
-- => De grote onderzoeksvraag aan de start van mijn doctoraat:
-     **hoe kunnen we weten welke methode de beste is voor een bepaalde toepassing?**
-
 ## Benchmark
 
-- Image classification
-- Eerste grote experiment.
+### Benchmark part 1 (3m20s)
+Dit brengt ons nu naar het eerste grote experiment dat ik gedaan heb voor mijn doctoraat.
+We focussen ons eventjes op het classificeren van afbeeldingen.
+Dat is een typisch probleem dat we kunnen oplossen met machine learning:
+we hebben een hoop foto's, bijvoorbeeld hier foto's van kleine handgeschreven cijfers,
+dat zijn onze invoerwaarden.
+Voor iedere foto hebben we ook een "label" dat zegt welk cijfer er op de foto staat,
+dat is onze uitvoerwaarde.
+Als we dus een model maken dat die uitvoerwaarde kan voorspellen,
+dan hebben we in feite een programma dat automatisch kan "zien"
+welk cijfer er in een foto staat.
+
+Nu vraag je je misschien af, hoe kan ik zo'n foto als invoer geven aan een functie?
+Simpel: iedere pixel in de foto is een getal dat weergeeft hoe helder die pixel is.
+In een kleurenfoto is iedere pixel 3 getallen: de hoeveelheid rood, groen en blauw in de pixel.
+Dus als we zoals hier een klein zwart-wit fotootje hebben van 28 op 28 pixels,
+dan heeft onze functie 784 invoerveranderlijken nodig.
+
+Attributies zijn heel handig in dit geval.
+Waarom? Omdat iedere invoerveranderlijke, dus iedere pixel, een score krijgt.
+We kunnen dus iedere pixel een kleurtje geven die die score weergeeft,
+en dan krijgen we dit soort visualizatie.
+Dit zegt ons, voor een bepaalde foto, welke pixels het *belangrijkst* waren.
+Merk op: nu hebben we een score voor 1 specifieke foto.
+We noemen dat ook *lokale* attributies.
+Daarnet, in ons model om energie te voorspellen,
+beschreven de scores de invloed van de veranderlijken in het algemeen,
+los van een specifieke meting.
+Dat noemen we dan *globale* attributies.
+
+Wat is nu het nut van zulke lokale attributies?
+Wel, we kunnen ze bijvoorbeeld gebruiken om te kijken of het model wel geleerd heeft
+wat we willen dat het leert.
+Een kleine, waargebeurde anecdote.
+Er was eens een groep onderzoekers die een model wou maken dat op basis van een foto van een plek op de huid
+kon voorspellen of die plek kwaadaardig of goedaardig zou zijn.
+Dat zou het veel makkelijker maken om bijvoorbeeld huidkanker vroeg op te sporen.
+Ze hadden veel data verzameld van zowel goedaardige als kwaadaardige plekken op de huid,
+en als ze hun model testten op die data, werkte alles perfect:
+het model kon redelijk goed voorspellen of een plek kwaadaardig of goedaardig was.
+Maar, als ze het model testten op nieuwe data, waren de voorspellingen plots helemaal nutteloos:
+we konden eigenlijk bijna even goede voorspellingen maken door gewoon te gokken.
+
+De onderzoekers gebruikten attributies om te zien waar hun model naar keek,
+en wat bleek: als er markeringen waren gemaakt op de huid, dan keek het model vooral naar die markeringen.
+Blijkbaar, als een dokter vindt dat een plek kwaadaardig is,
+dan gaat die markeringen tekenen op de huid die tonen aan de chirurg hoe de plek verwijderd moet worden.
+Het model ging dus gewoon op zoek naar van die markeringen.
+Als er geen markeringen op de huid staan, dan voorspelde het model dat de plek niet kwaadaardig was.
+Natuurlijk is dat redelijk zinloos,
+want als er al markeringen op de huid staan,
+dan is de diagnose al gebeurd en is de voorspelling van het model dus niet meer nuttig.
+
+### Benchmark part 2
+Er zijn heel veel mensen die onderzoek doen naar goeie manieren om zo'n attributies te berekenen,
+en dus zijn er heel veel manieren ontwikkeld om dat te doen.
+
+
+
+
 - Er bestaan enorm veel manieren om een "heatmap" te maken voor een bepaalde predictie
   - Allemaal gebaseerd op speciale wiskundige technieken waar we nu niet op hoeven ingaan
   - Allemaal ontworpen om te tonen *welke regio's in de foto het belangrijkst waren voor die ene predictie.*
