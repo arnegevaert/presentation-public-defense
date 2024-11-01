@@ -3,7 +3,8 @@
 See also: 3blue1brown manim tutorial!
 See also: manim slides! https://github.com/jeertmans/manim-slides
 
-## Preamble: (1m00s)
+
+## Preamble: (0m45s)
 Voor we beginnen een kleine dienstmededeling: de presentatie gaat volledig in het Nederlands zijn,
 maar de slides zijn in het Engels, zodat de Engelstaligen onder ons ook kunnen volgen.
 Ik ga dit nu nog even meedelen aan de Engelstaligen, en dan kunnen we beginnen.
@@ -15,9 +16,9 @@ This is a once in a lifetime opportunity, so please forgive me for taking it.
 That being said, the slides are in English and I have added subtitles wherever possible,
 so you should be able to follow using the slides.
 
-## Introductie: (8m30s)
+## Introductie: (8m15s)
 
-### Intro part 1 (1m45s)
+### Intro part 1 (1m30s)
 Om te beginnen, moeten we even terug naar iedereen zijn/haar favoriete plek en meest dierbare herinnering:
 de wiskundeles in het derde middelbaar.
 Ik voel de spanning al een beetje toenemen in de zaal, maar er is geen reden om bang te zijn.
@@ -26,7 +27,7 @@ eigenlijk vooral een trauma hebben aan de wiskunde*toets.*
 Vandaag is er geen toets, dus ook geen reden om bang te zijn.
 
 We beginnen met het concept *functie.*
-Een echte informaticus denkt in termen van in- en output,
+Een echte informaticus denkt in termen van in- en uitvoer,
 en we kunnen een functie ook zo bekijken:
 een soort "machine" die een invoer neemt en een uitvoer teruggeeft.
 
@@ -42,7 +43,7 @@ dan krijgen we inderdaad 2 maal 3 plus 1, en dat is 7.
 We kunnen hetzelfde doen met -1, en dan krijgen we 2 maal -1 plus 1, en dat is -3.
 
 We kunnen daar een grafiekje van maken.
-Hier zien we onze twee punten terug, die komen elk overeen met een invoer (links-rechts)
+Hier zien we onze twee punten terug, die komen elk overeen met een invoer op de X-as
 en de bijhorende uitvoer (de hoogte).
 Als we dit herhalen voor alle getallen, krijgen we deze lijn te zien.
 
@@ -94,6 +95,8 @@ Nu moeten we dus 3 getallen meegeven als invoer aan het model in plaats van 1.
 Die 3 getallen noemen we ook de *invoerveranderlijken.*
 Met 3 invoerveranderlijken kunnen we niet meer een grafiekje tekenen zoals daarnet,
 maar voor de computer is dit geen probleem.
+
+- [ ] TODO: expliciet naar 2 veranderlijken met surface plot gaan en dan lopen we vast
 
 ### Intro part 3 (2m45s)
 Het leuke aan dit model is dat we gewoon kunnen kijken naar de "programmacode",
@@ -184,7 +187,7 @@ Als we dus een model maken dat die uitvoerwaarde kan voorspellen,
 dan hebben we in feite een programma dat automatisch kan "zien"
 welk cijfer er in een foto staat.
 
-Nu vraag je je misschien af, hoe kan ik zo'n foto als invoer geven aan een model?
+Hoe kunnen we nu zo'n foto als invoer geven aan een model?
 Simpel: iedere pixel in de foto is een getal dat weergeeft hoe helder die pixel is.
 In een kleurenfoto is iedere pixel 3 getallen: de hoeveelheid rood, groen en blauw in de pixel.
 Dus als we zoals hier een klein zwart-wit fotootje hebben van 28 op 28 pixels,
@@ -205,7 +208,7 @@ Dat noemen we dan *globale* attributies.
 Wat is nu het nut van zulke lokale attributies?
 Wel, we kunnen ze bijvoorbeeld gebruiken om te kijken of het model wel geleerd heeft
 wat we willen dat het leert.
-Een kleine, waargebeurde anecdote.
+Een kleine anecdote.
 Er was eens een groep onderzoekers die een model wou maken dat op basis van een foto van een plek op de huid
 kon voorspellen of die plek kwaadaardig of goedaardig zou zijn.
 Dat zou het veel makkelijker maken om bijvoorbeeld huidkanker vroeg op te sporen.
@@ -232,11 +235,6 @@ Al die manieren geven ons verschillende attributies.
 Dat geeft ons een nieuw probleem: welke methode moeten we nu gebruiken?
 Als we op een of andere manier de kwaliteit van de attributies zouden kunnen meten,
 dan kunnen we de beste methode eruit kiezen.
-Een simpele manier om de kwaliteit te meten is bijvoorbeeld:
-neem de 10% pixels met de hoogste scores in de foto, en vervang ze door een zwarte achtergrondkleur.
-Geef die foto mee aan het model, en kijk naar het verschil in de uitvoer.
-Als die pixels echt belangrijk waren, dan zou de uitvoer van het model ook sterk moeten veranderen
-als we ze zwart maken.
 
 Er zijn heel veel mensen die onderzoek doen naar goeie manieren om de kwaliteit van attributies te meten,
 en dus zijn er heel veel manieren ontwikkeld om dat te doen.
@@ -466,11 +464,13 @@ Dat maakt al die methodes plots enorm veel makkelijker om te vergelijken:
 als we twee methodes met elkaar vergelijken,
 moeten we dus gewoon de 3 kenmerkende eigenschappen van die methodes naast elkaar leggen.
 
+- [ ] Hier explicieter maken: LIME vs een andere methode, allemaal toch hetzelfde.
+
 ## Functional decomposition (6m00s)
 
 ### FD part 1 (2m10s)
 Er is nog een belangrijk concept dat ik nog niet heb uitgelegd, en dat is *interactie.*
-Iedereen die kinderen heeft of ooit met kinderen heeft gewerkt, bijvoorbeeld in een jeugdbeweging, kent dit fenomeen.
+Iedereen die kinderen heeft of ooit met kinderen heeft gewerkt, kent dit fenomeen.
 Stel, er zijn 2 kinderen, die we liefkozend Kind A en Kind B noemen.
 Kind A en Kind B zijn heel goede vrienden.
 Stel nu dat er een speelkamer vol legoblokken ligt, en die moeten opgeruimd worden.
@@ -554,31 +554,33 @@ dan kunnen we eigenlijk ingredient 2,
 een manier om variabelen te verwijderen,
 vervangen door: een manier om een model op te splitsen in additieve deeltjes.
 
-## PDD-SHAP (7m10s)
+## PDD-SHAP (6m40s)
 
 ### PDD-SHAP part 1 (2m40)
 Je kan je nu afvragen, wat is daar nu het praktisch nut van?
 Jah, praktisch nut, dat is toch gewoon interessant?
 Allez, wie in de zaal had er verwacht dat het naar het einde toe plots over additieve functiedecompositie ging gaan?
-Ik niet alleszins, ma bon ja, praktisch nut, ok.
-Wel, ik heb een praktisch nut.
+Ik niet alleszins.
+Maar ok, zelfs naast deze mooie wiskundige link,
+die voor mij eigenlijk al interessant genoeg is,
+is er ook zelfs nog een praktisch nut.
 
 Er is een bepaalde, bestaande attributiemethode die enorm populair is, en die heet SHAP.
 De wiskunde achter die methode is heel geavanceerd,
-gebaseerd op cooperatieve speltheorie,
-dat is een theorie die oorspronkelijk ontwikkeld was om de uitkomst van een economische samenwerking
+gebaseerd op een theorie die oorspronkelijk ontwikkeld was om de uitkomst van een economische samenwerking
 eerlijk te verdelen onder de leden van een groep.
 Het is een heel ingewikkelde methode om uit te leggen,
 dus ik ga het niet proberen.
-Maar, we kunnen SHAP wel bekijken vanuit het perspectief van additieve functiedecompositie.
+Maar, we kunnen SHAP wel bekijken vanuit ons nieuw wiskundig kader
+met de 3 definierende keuzes.
 
 SHAP geeft attributiescores voor de uitvoer van de functie in een bepaald punt,
 dus eigenlijk zoals daarnet,
 toen we een verklaring wilden voor het risico op diabetes voor een bepaalde specifieke patient.
-Dat is het *doelwit.*
+Dat is ons *doelwit.*
 SHAP *verwijdert* variabelen door alle mogelijke waarden in te vullen en het gemiddelde te nemen van de uitvoer,
 dat hebben we ook al gezien.
-De aggregatie van SHAP is ingewikkelder, maar wordt makkelijker als we kijken naar de decompositie.
+De aggregatie van SHAP is ingewikkelder.
 Aangezien SHAP werkt door variabelen te verwijderen,
 maakt de methode achter de schermen ook een decompositie.
 Ik geef die decompositie hier schematisch weer: dit is het directe effect van x1,
@@ -591,23 +593,22 @@ plus alle interacties tussen x1 en een andere variabele, gedeeld door 2,
 plus alle interacties tussen x1 en 2 andere variabelen, gedeeld door 3,
 enzovoort.
 We kunnen SHAP dus eigenlijk samenvatten als:
-maak een decompositie van f, door f te splitsen in een som van kleinere functies,
+maak een decompositie van f,
+door f te splitsen in een som van kleinere functies,
 en verdeel ieder interactie-effect tussen een groep variabelen
 gelijk onder die variabelen.
-Met andere woorden, de helft van het interactie-effect tussen x1 en x2 gaat naar x1,
+Met andere woorden, de helft van dit interactie-effect gaat naar x1,
 de andere helft gaat naar x2.
-Een derde van het interactie-effect tussen x1, x2 en x3 gaat naar x1,
+Een derde van dit interactie-effect gaat naar x1,
 een derde gaat naar x2,
 en een derde gaat naar x3.
 
 ### PDD-SHAP part 2 (2m30s)
-Ik heb daarnet gezegd dat SHAP variabelen verwijdert door een gemiddelde te nemen van de output
-voor alle mogelijke waarden van de input.
+Ik heb daarnet gezegd dat SHAP variabelen verwijdert door een gemiddelde te nemen van de uitvoer
+voor alle mogelijke waarden van de invoer.
 Typisch gaan we niet letterlijk alle mogelijke waarden invullen,
 maar gaan we bijvoorbeeld 100 verschillende waarden invullen,
 en dan veronderstellen dat dat ongeveer representatief is.
-Dat betekent dus dat we de output van ons model 100 keer moeten berekenen
-om een groep variabelen te verwijderen.
 
 Nu, SHAP kijkt ook naar alle mogelijke deelverzamelingen van variabelen,
 iets dat we daarnet in ons diabetesvoorbeeld niet deden.
@@ -617,19 +618,19 @@ met 6 variabelen hebben we 64 mogelijke deelverzamelingen,
 7 variabelen geeft ons 128 verzamelingen,
 enzovoort.
 Om SHAP te berekenen, moeten we dus in principe al die deelverzamelingen verwijderen,
-en voor elk van die deelverzamelingen moeten we het model dus 100 keer uitvoeren.
-Voor 7 variabelen zouden we het model dus 12800 keer moeten uitvoeren.
+en voor elke deelverzameling moeten we 100 verschillende waarden invullen.
+Voor 7 variabelen moeten we dus bijvoorbeeld 12800 keer de uitvoer van het model berekenen.
 Dat is heel veel,
-en typisch gaan we opnieuw ook niet alle deelverzamelingen verwijderen,
-maar gewoon een stuk of 100,
+en typisch gaan we ook niet alle deelverzamelingen verwijderen,
+maar opnieuw gewoon een stuk of 100,
 en dan weer veronderstellen dat dat ongeveer representatief is.
 Maar goed, dat is nog altijd 100 maal 100 oftewel 10.000 keer het model uitvoeren.
 Dat is nog altijd veel rekenwerk.
 
 Stel dat we een decompositie zouden hebben van het model,
 met andere woorden:
-voor elk direct en interactie-effect hebben we een kleiner model,
-zodat de som van al deze componenten gelijk is aan het originele model.
+voor elk van deze componenten hebben we een kleiner model
+dat we kunnen berekenen.
 Dan zou het al veel makkelijker zijn:
 we moeten gewoon de uitvoer van elke component 1 keer berekenen in plaats van 100.
 Het zijn er wel nog altijd veel: voor 7 variabelen zijn het er nog steeds 128.
@@ -637,28 +638,28 @@ Maar daar kunnen we een beetje in snoeien.
 In de praktijk is het namelijk zo dat voor veel datasets en modellen,
 interacties tussen grote groepen variabelen eigenlijk redelijk zeldzaam zijn.
 Meestal kan een model gesplitst worden in directe effecten en interacties tussen een paar variabelen.
-Dat betekent dus, als we 7 variabelen hebben,
+Dat betekent dus, als we bijvoorbeeld 7 variabelen hebben,
 we misschien al een goede benadering kunnen krijgen als we bijvoorbeeld alle
 interacties tussen 3 variabelen of minder in rekening brengen.
 
-Als we dus voor iedere component in de decompositie
-een kleiner model zouden hebben,
+Als we dus een decompositie van het model zouden hebben,
 dan zouden we SHAP veel sneller kunnen berekenen.
-Natuurlijk, ons model is te ingewikkeld om gewoon manueel op te splitsen
+Natuurlijk, ons model is te ingewikkeld om manueel op te splitsen
 zoals we daarnet gedaan hebben met de functie.
 Was er maar een manier om,
 uit een grote hoeveelheid data bijvoorbeeld,
 vanzelf een model als het ware te laten "leren"
 voorspellen wat de uitvoer zou zijn van zo'n component...
 
-### PDD-SHAP part 3 (2m00s)
-Dat is dus natuurlijk precies wat ik gedaan heb.
-Zonder al te veel in te gaan op de details, heb ik dus voor elke component
-een klein model getraind,
-zodat we uiteindelijk een verzameling kleine modellen hebben waarvan de som
-ongeveer gelijk is aan het originele model.
+### PDD-SHAP part 3 (1m30s)
+Dat is dus natuurlijk precies wat mijn algoritme, PDD-SHAP, doet.
+Kort samengevat, traint dit algoritme voor iedere component
+een klein model,
+zodat we uiteindelijk een verzameling kleine modellen hebben
+die elk de waarde van een interactie-effect voorspellen.
 Eens dat gebeurd is, kunnen we SHAP-waarden berekenen door gewoon
-de uitvoer te berekenen van de kleine modellen, en voila, klaar.
+de uitvoer te berekenen van de kleine modellen,
+en die uitvoer op de juiste manier te verdelen onder de variabelen.
 
 Laat ons kijken naar het resultaat.
 Wat je kan zien op deze grafiek is de accuraatheid van de SHAP attributies
@@ -679,24 +680,27 @@ sneller is dan de klassieke algoritmes voor SHAP-waarden.
 We krijgen dus een nieuwe afweging:
 als we kunnen leven met een benadering,
 en we hebben genoeg met relatief kleine interacties,
-dan kunnen we dus dit algoritme gebruiken om heel veel rekenwerk te besparen.
+dan kunnen we dit algoritme gebruiken om heel veel rekenwerk te besparen.
 
-## Conclusie (1m00s)
+## Conclusie (0m45s)
 Om af te ronden: in mijn doctoraat heb ik 3 dingen gedaan.
-Ten eerste heb ik een experiment uitgevoerd,
-waaruit we konden afleiden dat er niet zoiets bestaat als een universele maat van "correctheid"
-van attributies,
+Ten eerste heb ik experimenteel aangetoond 
+dat er niet zoiets bestaat als een universele maat van "correctheid" van attributies,
 en dat we eigenlijk moeten proberen om de verschillen tussen bestaande methoden beter te begrijpen,
 in plaats van gewoon te zoeken naar "de beste."
 
 Daarna heb ik een theoretisch kader ontworpen waarmee we een grote verzameling bestaande methoden
-onder dezelfde noemer kunnen plaatsen,
-en dus ook makkelijker kunnen vergelijken.
-Als onderdeel van dit kader heb ik ook een link aangetoond tussen attributie
-en additieve decompositie van functies.
+onder dezelfde noemer kunnen plaatsen, en dus ook makkelijker kunnen vergelijken,
+en heb ik een link aangetoond tussen attributie en additieve decompositie van functies.
 
 En ten slotte heb ik mijn theoretisch kader gebruikt
 om een nieuw benaderingsalgoritme te ontwerpen voor een bestaande attributiemethode,
 zodat die attributies veel sneller berekend kunnen worden.
 
-En daarmee ben ik uitgepraat, en dank ik u voor uw aandacht.
+Dan wil ik u alleen nog bedanken voor uw aandacht.
+
+## Notes
+- [ ] Ander woord voor "plek" op de huid?
+- [ ] "er zijn veel methoden/metrieken" => toon hoofdingen van papers
+- [ ] Eventueel verwijzing naar wout/lennert ipv Kind A, Kind B?
+- [ ] Visueel duidelijk maken waar ik zit
