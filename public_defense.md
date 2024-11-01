@@ -554,28 +554,149 @@ dan kunnen we eigenlijk ingredient 2,
 een manier om variabelen te verwijderen,
 vervangen door: een manier om een model op te splitsen in additieve deeltjes.
 
-## PDD-SHAP
-- Wat is daar nu het praktisch nut van?
-=> SHAP is een populaire methode: verwijdert alle mogelijke deelverzamelingen en aggregeert op een ingewikkelde manier.
-Gebaseerd op speltheorie, theorie uit 1970(?) die oorspronkelijk ontwikkeld was om een bepaalde uitkomst van samenwerking eerlijk te verdelen onder spelers.
+## PDD-SHAP (7m10s)
 
-Maar: via framework kunnen we het samenvatten in 3 keuzes:
-- doelwit = functie zelf, de scores zeggen wat de invloed is van iedere veranderlijke op de uitvoer van het model in x
-- verwijderen = gemiddelde output over marginal distribution
-- aggregeren = iedere interactie wordt gelijk verdeeld onder de leden
+### PDD-SHAP part 1 (2m40)
+Je kan je nu afvragen, wat is daar nu het praktisch nut van?
+Jah, praktisch nut, dat is toch gewoon interessant?
+Allez, wie in de zaal had er verwacht dat het naar het einde toe plots over additieve functiedecompositie ging gaan?
+Ik niet alleszins, ma bon ja, praktisch nut, ok.
+Wel, ik heb een praktisch nut.
 
-Computationele kost: aantal deelverzamelingen * aantal datapunten, super duur.
+Er is een bepaalde, bestaande attributiemethode die enorm populair is, en die heet SHAP.
+De wiskunde achter die methode is heel geavanceerd,
+gebaseerd op cooperatieve speltheorie,
+dat is een theorie die oorspronkelijk ontwikkeld was om de uitkomst van een economische samenwerking
+eerlijk te verdelen onder de leden van een groep.
+Het is een heel ingewikkelde methode om uit te leggen,
+dus ik ga het niet proberen.
+Maar, we kunnen SHAP wel bekijken vanuit het perspectief van additieve functiedecompositie.
 
-Als we de decompositie zouden hebben, kunnen we het gewoon berekenen als gewogen som van componenten.
+SHAP geeft attributiescores voor de uitvoer van de functie in een bepaald punt,
+dus eigenlijk zoals daarnet,
+toen we een verklaring wilden voor het risico op diabetes voor een bepaalde specifieke patient.
+Dat is het *doelwit.*
+SHAP *verwijdert* variabelen door alle mogelijke waarden in te vullen en het gemiddelde te nemen van de uitvoer,
+dat hebben we ook al gezien.
+De aggregatie van SHAP is ingewikkelder, maar wordt makkelijker als we kijken naar de decompositie.
+Aangezien SHAP werkt door variabelen te verwijderen,
+maakt de methode achter de schermen ook een decompositie.
+Ik geef die decompositie hier schematisch weer: dit is het directe effect van x1,
+dit is het interactie-effect tussen x1 en x2, enzovoort.
 
-Dit is het idee van PDD-SHAP: maak een nieuw model voor iedere component!
+We kunnen nu de decompositie gebruiken om de SHAP-waarde voor een variabele te berekenen,
+laat ons bijvoorbeeld x1 kiezen hiervoor.
+De SHAP-waarde voor x1 is het direct effect van x1,
+plus alle interacties tussen x1 en een andere variabele, gedeeld door 2,
+plus alle interacties tussen x1 en 2 andere variabelen, gedeeld door 3,
+enzovoort.
+We kunnen SHAP dus eigenlijk samenvatten als:
+maak een decompositie van f, door f te splitsen in een som van kleinere functies,
+en verdeel ieder interactie-effect tussen een groep variabelen
+gelijk onder die variabelen.
+Met andere woorden, de helft van het interactie-effect tussen x1 en x2 gaat naar x1,
+de andere helft gaat naar x2.
+Een derde van het interactie-effect tussen x1, x2 en x3 gaat naar x1,
+een derde gaat naar x2,
+en een derde gaat naar x3.
 
-Te veel componenten? => factor sparsity
+### PDD-SHAP part 2 (2m30s)
+Ik heb daarnet gezegd dat SHAP variabelen verwijdert door een gemiddelde te nemen van de output
+voor alle mogelijke waarden van de input.
+Typisch gaan we niet letterlijk alle mogelijke waarden invullen,
+maar gaan we bijvoorbeeld 100 verschillende waarden invullen,
+en dan veronderstellen dat dat ongeveer representatief is.
+Dat betekent dus dat we de output van ons model 100 keer moeten berekenen
+om een groep variabelen te verwijderen.
 
-Results: R2, speed.
+Nu, SHAP kijkt ook naar alle mogelijke deelverzamelingen van variabelen,
+iets dat we daarnet in ons diabetesvoorbeeld niet deden.
+Herinner u dat we voor 5 variabelen 32 mogelijke deelverzamelingen hebben.
+Als we een variabele toevoegen, verdubbelt dat aantal:
+met 6 variabelen hebben we 64 mogelijke deelverzamelingen,
+7 variabelen geeft ons 128 verzamelingen,
+enzovoort.
+Om SHAP te berekenen, moeten we dus in principe al die deelverzamelingen verwijderen,
+en voor elk van die deelverzamelingen moeten we het model dus 100 keer uitvoeren.
+Voor 7 variabelen zouden we het model dus 12800 keer moeten uitvoeren.
+Dat is heel veel,
+en typisch gaan we opnieuw ook niet alle deelverzamelingen verwijderen,
+maar gewoon een stuk of 100,
+en dan weer veronderstellen dat dat ongeveer representatief is.
+Maar goed, dat is nog altijd 100 maal 100 oftewel 10.000 keer het model uitvoeren.
+Dat is nog altijd veel rekenwerk.
 
+Stel dat we een decompositie zouden hebben van het model,
+met andere woorden:
+voor elk direct en interactie-effect hebben we een kleiner model,
+zodat de som van al deze componenten gelijk is aan het originele model.
+Dan zou het al veel makkelijker zijn:
+we moeten gewoon de uitvoer van elke component 1 keer berekenen in plaats van 100.
+Het zijn er wel nog altijd veel: voor 7 variabelen zijn het er nog steeds 128.
+Maar daar kunnen we een beetje in snoeien.
+In de praktijk is het namelijk zo dat voor veel datasets en modellen,
+interacties tussen grote groepen variabelen eigenlijk redelijk zeldzaam zijn.
+Meestal kan een model gesplitst worden in directe effecten en interacties tussen een paar variabelen.
+Dat betekent dus, als we 7 variabelen hebben,
+we misschien al een goede benadering kunnen krijgen als we bijvoorbeeld alle
+interacties tussen 3 variabelen of minder in rekening brengen.
 
-## Conclusie
-- Benchmark => geen universele maat van "kwaliteit"
-- Decompositie => we kunnen verschillende methodes vergelijken met elkaar door ze onder hetzelfde raamwerk te brengen
-- PDD-SHAP => we kunnen dit raamwerk gebruiken om bestaande verklaringen sneller te berekenen
+Als we dus voor iedere component in de decompositie
+een kleiner model zouden hebben,
+dan zouden we SHAP veel sneller kunnen berekenen.
+Natuurlijk, ons model is te ingewikkeld om gewoon manueel op te splitsen
+zoals we daarnet gedaan hebben met de functie.
+Was er maar een manier om,
+uit een grote hoeveelheid data bijvoorbeeld,
+vanzelf een model als het ware te laten "leren"
+voorspellen wat de uitvoer zou zijn van zo'n component...
+
+### PDD-SHAP part 3 (2m00s)
+Dat is dus natuurlijk precies wat ik gedaan heb.
+Zonder al te veel in te gaan op de details, heb ik dus voor elke component
+een klein model getraind,
+zodat we uiteindelijk een verzameling kleine modellen hebben waarvan de som
+ongeveer gelijk is aan het originele model.
+Eens dat gebeurd is, kunnen we SHAP-waarden berekenen door gewoon
+de uitvoer te berekenen van de kleine modellen, en voila, klaar.
+
+Laat ons kijken naar het resultaat.
+Wat je kan zien op deze grafiek is de accuraatheid van de SHAP attributies
+zoals voorspeld door mijn algoritme.
+Als die waarde 1 is, is de benadering perfect.
+Iedere curve komt overeen met een bepaalde dataset, dus een bepaald model.
+Op de X-as staat de grootte van de interacties die we modelleren,
+hier bijvoorbeeld modelleren we alle directe effecten,
+en interacties tussen 2 of 3 variabelen.
+Voor de meeste datasets is de benadering redelijk goed vanaf 2 of 3,
+voor andere datasets hebben we toch interacties tussen 4 variabelen nodig,
+en misschien zelfs tussen 5 variabelen ook.
+
+Op deze grafiek zien we dan de snelheid van het algoritme.
+De Y-as is nu het aantal seconden dat nodig is om 1000 SHAP-waarden te berekenen.
+Dit is een logaritmische as: hier zien we dus bijvoorbeeld dat mijn algoritme ongeveer 1000 keer
+sneller is dan de klassieke algoritmes voor SHAP-waarden.
+We krijgen dus een nieuwe afweging:
+als we kunnen leven met een benadering,
+en we hebben genoeg met relatief kleine interacties,
+dan kunnen we dus dit algoritme gebruiken om heel veel rekenwerk te besparen.
+
+## Conclusie (1m00s)
+Om af te ronden: in mijn doctoraat heb ik 3 dingen gedaan.
+Ten eerste heb ik een experiment uitgevoerd,
+waaruit we konden afleiden dat er niet zoiets bestaat als een universele maat van "correctheid"
+van attributies,
+en dat we eigenlijk moeten proberen om de verschillen tussen bestaande methoden beter te begrijpen,
+in plaats van gewoon te zoeken naar "de beste."
+
+Daarna heb ik een theoretisch kader ontworpen waarmee we een grote verzameling bestaande methoden
+onder dezelfde noemer kunnen plaatsen,
+en dus ook makkelijker kunnen vergelijken.
+Als onderdeel van dit kader heb ik ook een link aangetoond tussen attributie
+en additieve decompositie van functies.
+
+En ten slotte heb ik mijn theoretisch kader gebruikt
+om een nieuw benaderingsalgoritme te ontwerpen voor een bestaande attributiemethode,
+zodat die attributies veel sneller berekend kunnen worden.
+
+En daarmee ben ik uitgepraat, en dank ik u voor uw aandacht.
