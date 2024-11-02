@@ -36,9 +36,9 @@ def make_toc_slide(slide, chapter):
     
     slide.next_slide()
     slide.play(FadeOut(contents[chapter-1]))
-    slide.next_slide()
+    slide.next_slide()       
 
-class Introduction(Slide):
+class Chapter1_1(Slide):
     def construct(self):
         title1 = Text(
             "Unifying Attribution-Based Explanation Methods", color=WHITE, font_size=32,
@@ -57,12 +57,8 @@ class Introduction(Slide):
         self.next_slide()
         self.play(FadeOut(title1),FadeOut(title2), FadeOut(author_date))
 
-class TocIntro(Slide):
-    def construct(self):
         make_toc_slide(self, chapter=1)
-
-class Chapter1_1(Slide):
-    def construct(self):
+        
         # GENERAL FUNCTION
         rect = Rectangle(width=5, height=3)
         f = MathTex("f", font_size=100)
@@ -112,8 +108,8 @@ class Chapter1_1(Slide):
 
         self.next_slide()
 
-class Chapter1_2(Slide):
-    def construct(self):
+        ###
+
         # GRAPH
         axis_config = {"include_ticks": True, "include_numbers": True}
         plane = NumberPlane(x_axis_config=axis_config, y_axis_config=axis_config)
@@ -168,8 +164,8 @@ class Chapter1_2(Slide):
         )
         self.next_slide()
 
-class Chapter1_3(Slide):
-    def construct(self):
+        ###
+
         # Look at equation parameters
         eq = MathTex("f(x) = 0.5 * x - 1", font_size=100, substrings_to_isolate=["0.5", "1"])
         self.play(Write(eq))
@@ -251,8 +247,8 @@ class Chapter1_3(Slide):
         )
         self.next_slide()
 
-class Chapter1_4(Slide):
-    def construct(self):
+        ###
+
         # Draw axes
         axis_config = {"include_ticks": True, "include_numbers": True, }
         plane = NumberPlane(
@@ -305,9 +301,9 @@ class Chapter1_4(Slide):
         self.play(
             *[FadeOut(obj) for obj in self.mobjects_without_canvas]
         )
-        self.next_slide()       
+        self.next_slide()
 
-class Chapter1_5(ThreeDSlide):
+class Chapter1_2(ThreeDSlide):
     def construct(self):
         axes = ThreeDAxes()
         self.set_camera_orientation(theta=-45 * DEGREES, phi=75 * DEGREES)
@@ -361,7 +357,7 @@ class Chapter1_5(ThreeDSlide):
         )
         self.next_slide()
 
-class Chapter1_6(Slide):
+class Chapter1_3(Slide):
     def construct(self):
         rows = [Text(f"Day {i+1}") for i in range(6)]
         cols = [Tex(label) for label in ["$x_1$: Temp (C)", "$x_1$: People", "$x_1$: Sun (\%)", "$y$: Energy"]]
