@@ -1,4 +1,5 @@
 from manim import *
+from sklearn import linear_model
 
 
 def paragraph(*strs, alignment=LEFT, direction=DOWN, **kwargs):
@@ -10,5 +11,19 @@ def paragraph(*strs, alignment=LEFT, direction=DOWN, **kwargs):
 
     return texts
 
-TITLE_FONT_SIZE = 32
-CONTENT_FONT_SIZE = 0.8 * TITLE_FONT_SIZE
+def example_function_1():
+    def fun(x):
+        return 0.5 * x - 1
+    return fun, "f({}) = 0.5 * {} - 1"
+
+
+def linreg_univariate(x_points, y_points):
+    lm = linear_model.LinearRegression()
+    lm.fit(x_points.reshape(-1, 1), y_points)
+    return lm
+
+
+def linreg_multivariate(x_points, y_points):
+    lm = linear_model.LinearRegression()
+    lm.fit(x_points, y_points)
+    return lm

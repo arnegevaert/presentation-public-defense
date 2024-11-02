@@ -35,8 +35,8 @@ en aan de rechterkant schrijven we wat we willen dat f doet met x.
 In dit geval gaat f het getal x vermenigvuldigen met 2 en er dan 1 van aftrekken.
 
 We kunnen dit eens testen: als we het getal 3 meegeven met f,
-dan krijgen we inderdaad 2 maal 3 plus 1, en dat is 7.
-We kunnen hetzelfde doen met -1, en dan krijgen we 2 maal -1 plus 1, en dat is -3.
+dan krijgen we inderdaad 2 maal 3 min 1, en dat is 5.
+We kunnen hetzelfde doen met -1, en dan krijgen we 2 maal -1 min 1, en dat is -3.
 
 We kunnen daar een grafiekje van maken.
 Hier zien we onze twee punten terug, die komen elk overeen met een invoer op de X-as
@@ -82,6 +82,8 @@ We zien ook dat de foutfunctie nu veel kleiner is dan daarnet.
 Zo'n functie waarvan de computer zelf de parameters heeft gekozen,
 noemen we in machine learning ook een *model.*
 
+- [ ] TODO: expliciet naar 2 veranderlijken met surface plot gaan en dan lopen we vast
+
 Nu denk je misschien, maar allez, we hadden die lijn nu toch ook wel met het blote oog kunnen tekenen.
 En dat klopt, maar dat gaat niet altijd lukken.
 Stel bijvoorbeeld dat we niet alleen de temperatuur bijhouden,
@@ -92,7 +94,6 @@ Die 3 getallen noemen we ook de *invoerveranderlijken.*
 Met 3 invoerveranderlijken kunnen we niet meer een grafiekje tekenen zoals daarnet,
 maar voor de computer is dit geen probleem.
 
-- [ ] TODO: expliciet naar 2 veranderlijken met surface plot gaan en dan lopen we vast
 
 ### Intro part 3 (2m45s)
 Het leuke aan dit model is dat we gewoon kunnen kijken naar de "programmacode",
