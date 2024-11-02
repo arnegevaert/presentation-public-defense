@@ -1,9 +1,9 @@
 from manim import *
-import manim_slides
+from manim_slides import Slide
 
-class BasicExample(manim_slides.Slide):
+class Presentation(Slide):
     def construct(self):
-        circle = Circle(radius=3, color=BLUE)
+        circle = Circle(radius=3, color=RED)
         dot = Dot()
 
         self.play(GrowFromCenter(circle))
