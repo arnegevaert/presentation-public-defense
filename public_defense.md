@@ -1,9 +1,5 @@
 # Public defense
 
-See also: 3blue1brown manim tutorial!
-See also: manim slides! https://github.com/jeertmans/manim-slides
-
-
 ## Preamble: (0m45s)
 Voor we beginnen een kleine dienstmededeling: de presentatie gaat volledig in het Nederlands zijn,
 maar de slides zijn in het Engels, zodat de Engelstaligen onder ons ook kunnen volgen.
