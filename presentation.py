@@ -1103,9 +1103,8 @@ class Presentation(ThreeDSlide):
         self.play(
             *[FadeOut(obj) for obj in self.mobjects_without_canvas]
         )
-   
 
-    def construct_chapter_3_2(self):
+    def construct_chapter3_2(self):
         title = Text("Three ingredients:", font_size=50).shift(2 * UP)
         p = paragraph(
             "1. Target: what to explain",
