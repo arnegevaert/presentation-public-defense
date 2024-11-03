@@ -1,7 +1,8 @@
 from manim import *
 from sklearn import linear_model
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.pipeline import Pipeline
+from sklearn.neural_network import MLPRegressor
 
 
 def paragraph(*strs, alignment=LEFT, direction=DOWN, **kwargs):
@@ -38,3 +39,11 @@ def parabolic_reg(x_points, y_points):
     ])
     lm.fit(x_points.reshape(-1, 1), y_points)
     return lm
+
+def nn_reg(x_points, y_points):
+    model = Pipeline([
+        ("scale", StandardScaler()),
+        ("predict", MLPRegressor(alpha=1e-4, tol=1e-6, max_iter=int(1e6), hidden_layer_sizes=(25,)))
+    ])
+    model.fit(x_points.reshape(-1, 1), y_points)
+    return model

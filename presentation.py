@@ -2,7 +2,7 @@ from manim import *
 from manim_slides import Slide, ThreeDSlide
 from sklearn.metrics import root_mean_squared_error
 
-from util import paragraph, example_function_1, linreg_univariate, linreg_multivariate, parabolic_reg
+from util import paragraph, example_function_1, linreg_univariate, linreg_multivariate, parabolic_reg, nn_reg
 
 config.background_color = "#262626ff"
 
@@ -508,10 +508,74 @@ class Presentation(ThreeDSlide):
 
         # TODO add equation showing added parameter
 
+        # CHANGE TO MORE COMPLEX DATA
+
+        self.next_slide()
+        
+        self.play(FadeOut(reg_line))
+        def noise_data(x):
+            rng = np.random.default_rng(seed=0)
+            noise = rng.normal(0, 2, len(x))
+            return noise + 3.5
+        y_noise = noise_data(x_points)
+
+        self.next_slide()
+        
+        for i in range(len(dots)):
+            dot = dots[i]
+            dot.generate_target()
+            dot.target.move_to(plane.coords_to_point(x_points[i], y_noise[i], 0))
+        self.play(MoveToTarget(dot) for dot in dots)
+
+        self.next_slide()
+        
+        nn = nn_reg(x_points, y_noise)
+        nn_line = plane.plot(lambda x: nn.predict(np.array(x).reshape(-1,1))[0])
+        self.play(Write(nn_line))
+
         self.next_slide()
         self.play(
             *[FadeOut(obj) for obj in self.mobjects_without_canvas]
         )
+
+    def construct_chapter1_8(self):
+        x_points = np.arange(-3, 19, 2)
+        def noise_data(x):
+            rng = np.random.default_rng(seed=0)
+            noise = rng.normal(0, 2, len(x))
+            return noise + 3.5
+        y_noise = noise_data(x_points)
+        nn = nn_reg(x_points, y_noise)
+
+        nn_string = f"f(x) &= {nn['predict'].intercepts_[1][0]:.2f}"
+        l1_coefs = nn["predict"].coefs_[0].reshape(-1)
+        l2_coefs = nn["predict"].coefs_[1].reshape(-1)
+        l1_intercepts = nn["predict"].intercepts_[0].reshape(-1)
+        
+        for i in range(25):
+            substring = "{:.4f} * \\max(0, {:.4f} * x {} {:.4f})".format(
+                l2_coefs[i], l1_coefs[i], '+' if l1_intercepts[i] > 0 else '', l1_intercepts[i]
+            )
+            if i % 2 == 0:
+                substring = substring + '\\\\ &'
+            if l2_coefs[i] > 0:
+                nn_string += '+'
+            nn_string += substring
+        
+        formula = MathTex(nn_string).scale(1.5)
+        self.play(Write(formula))
+        self.next_slide()
+
+        formula.generate_target()
+        formula.target.scale(0.5)
+
+        self.play(MoveToTarget(formula, run_time=5))
+
+        self.next_slide()
+        self.play(
+            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
+        )
+        self.next_slide()
     
     def construct(self):
         #self.construct_titleslide()
@@ -523,6 +587,7 @@ class Presentation(ThreeDSlide):
         #self.construct_chapter1_5()
         self.construct_chapter1_6()
         self.construct_chapter1_7()
+        self.construct_chapter1_8()
         self.construct_toc_slide(chapter=2)
 
 
