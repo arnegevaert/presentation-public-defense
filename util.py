@@ -1,5 +1,7 @@
 from manim import *
 from sklearn import linear_model
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import Pipeline
 
 
 def paragraph(*strs, alignment=LEFT, direction=DOWN, **kwargs):
@@ -26,4 +28,13 @@ def linreg_univariate(x_points, y_points):
 def linreg_multivariate(x_points, y_points):
     lm = linear_model.LinearRegression()
     lm.fit(x_points, y_points)
+    return lm
+
+def parabolic_reg(x_points, y_points):
+    feat = PolynomialFeatures(degree=2)
+    lm = Pipeline([
+        ('preproc', PolynomialFeatures(degree=2)),
+        ('model', linear_model.LinearRegression())
+    ])
+    lm.fit(x_points.reshape(-1, 1), y_points)
     return lm

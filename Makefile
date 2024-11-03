@@ -1,10 +1,9 @@
-scenes = Chapter1_1 Chapter1_2 Chapter1_3
 quickbuild:
-	manim-slides render presentation.py $(scenes) -q l
+	manim-slides render presentation.py Presentation -q l
 build:
-	manim-slides render presentation.py $(scenes) -q k
+	manim-slides render presentation.py Presentation -q k
 convert:
-	manim-slides convert $(scenes) out/presentation.html
+	manim-slides convert Presentation out/presentation.html
 clean:
 	rm -rf out/*
 	rm -rf media/*
