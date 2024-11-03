@@ -1,7 +1,7 @@
 quickbuild:
 	manim-slides render presentation.py Presentation -q l
 build:
-	manim-slides render presentation.py Presentation -q k
+	manim-slides render presentation.py Presentation -q h
 convert:
 	manim-slides convert Presentation out/presentation.html
 clean:

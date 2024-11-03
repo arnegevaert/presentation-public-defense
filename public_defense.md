@@ -197,6 +197,9 @@ Waarom? Omdat iedere invoerveranderlijke, dus iedere pixel, een score krijgt.
 We kunnen dus iedere pixel een kleurtje geven die die score weergeeft,
 en dan krijgen we dit soort visualizatie.
 Dit zegt ons, voor een bepaalde foto, welke pixels het *belangrijkst* waren.
+Hier zien we bijvoorbeeld dat de pixels van de nul zelf belangrijk waren,
+maar ook de pixels in het midden:
+als die een andere waarde hadden, dan was onze nul misschien een acht.
 Merk op: nu hebben we een score voor 1 specifieke foto.
 We noemen dat ook *lokale* attributies.
 Daarnet, in ons model om energie te voorspellen,
@@ -376,7 +379,7 @@ Wat we dus eigenlijk zouden moeten doen,
 is niet alleen iedere veranderlijke apart verwijderen,
 maar ook alle mogelijke groepen van veranderlijken verwijderen.
 Dat kunnen we natuurlijk doen, maar dan hebben we een nieuw probleem:
-voor 5 veranderlijken zijn er 32 mogelijke groepen (of deelverzamelingen).
+voor een verzameling van 5 veranderlijken zijn er 32 mogelijke groepen (of deelverzamelingen).
 We hebben nu dus 32 uitvoerwaarden voor die 5 veranderlijken.
 We moeten dus nog op een of andere manier die 32 uitvoerwaarden "samenvatten" in 5 scores,
 namelijk 1 voor iedere veranderlijke.
