@@ -142,13 +142,15 @@ Toen ChatGPT 2 jaar geleden uitkwam, gebruikte dat het GPT3.5-model.
 Dat model heeft *175* parameters.
 Sorry, 175 *miljard* parameters.
 Hoeveel parameters er in de nieuwste versie zitten, willen de makers ons niet vertellen,
-maar het wordt geschat rond de 100 *biljoen*, dus nog eens ongeveer 1000 keer zoveel.
+maar het wordt geschat rond de 1.75 *biljoen*, dus nog eens ongeveer 10 keer zoveel.
 
 ### Intro part 4 (1m20s)
-Als we alle 100 biljoen parameters van ChatGPT op standaard A4 printerpapier zouden zetten,
-dan zou de stapel papier ongeveer 25000km hoog zijn,
-oftewel ongeveer vijf keer de afstand van deze zaal tot in Tashkent,
-de hoofdstad van Oezbekistan.
+Als we alle 1.75 biljoen parameters van ChatGPT op standaard A4 printerpapier zouden zetten, *(2+1+4+1 characters/param, 2000 characters/page, 0.1mm per page => 700km)*
+dan zou de stapel papier ongeveer 700km hoog zijn,
+oftewel ongeveer de afstand van deze zaal tot in Berlijn.
+Als je 2024 jaar geleden, naast de kribbe van het kindeke Jezus,
+het model was beginnen opschrijven aan 1 parameter per seconde zonder pauzeren,
+dan had je vandaag ongeveer 3.6% van het werk gedaan.
 Zo'n groot model kunnen we natuurlijk niet meer verstaan door naar de formule te kijken.
 
 Wat we wel nog kunnen doen, is het model beschouwen als een soort zwarte doos,

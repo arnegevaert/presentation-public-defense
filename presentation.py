@@ -576,18 +576,117 @@ class Presentation(ThreeDSlide):
             *[FadeOut(obj) for obj in self.mobjects_without_canvas]
         )
         self.next_slide()
+
+    def construct_chapter1_9(self):
+        title_text = Text("ChaptGPT (GPT-3.5):").shift(2 * UP)
+        self.play(Write(title_text))
+        self.next_slide()
+
+        num_text = Text("175", font_size=125)
+        self.play(Write(num_text))
+
+        param_text = Text("parameters").next_to(num_text, 2*DOWN)
+        self.play(Write(param_text))
+
+        self.next_slide()
+
+        num_text.generate_target()
+        num_text.target.shift(3 * LEFT)
+        self.play(MoveToTarget(num_text))
+        billion = Text("billion", font_size=125, color=RED).next_to(num_text, 2*RIGHT)
+        self.play(Write(billion))
+
+        self.next_slide()
+        cur_text = Text("ChatGPT-4: 1.75 trillion (estimated)").next_to(param_text, DOWN)
+        self.play(Write(cur_text))
+
+        self.next_slide()
+        self.play(
+            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
+        )
+
+        map_img = ImageMobject("distance.png").scale(0.4)
+        dist_text = Text("687.8 km").next_to(map_img, DOWN)
+        self.play(FadeIn(map_img), Write(dist_text))
+
+        self.next_slide()
+
+        time_text = Text("Writing at 1 parameter per second: 55,492 years").scale(0.8).next_to(dist_text, DOWN)
+        self.play(Write(time_text))
+
+        self.next_slide()
+        self.play(
+            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
+        )
+
+    def construct_chapter1_10(self):
+        rect = Rectangle(width=5, height=3)
+        f = MathTex("f", font_size=100)
+        self.play(Create(rect), Write(f))
+        
+        self.next_slide()
+
+        in_arrows, in_vars = [], []
+        for i, direction in enumerate((UL, LEFT, DL)):
+            arr = Arrow(start=direction, end=RIGHT).next_to(rect, direction=direction)
+            in_arrows.append(arr)
+            in_vars.append(MathTex(f"x_{i+1}", font_size=100).next_to(arr, direction=direction))
+
+        out_arrow = Arrow(start=LEFT, end=RIGHT).next_to(rect, direction=RIGHT)
+        
+        y = MathTex("y", font_size=100).next_to(out_arrow, direction=RIGHT)
+        
+        self.play(
+            *[DrawBorderThenFill(in_arrow, run_time=1) for in_arrow in in_arrows],
+            *[Write(x, run_time=1) for x in in_vars]
+        )
+        self.play(
+            DrawBorderThenFill(out_arrow, run_time=1),
+            Write(y, run_time=1)
+        )
+
+        self.next_slide()
+
+        params = [
+            (0, 1.1, 0.01),
+            (1, 2, 0.06),
+            (2, 1.3, 0.02)
+        ]
+        
+        for i, scale, rot in params:
+            self.play(Circumscribe(in_vars[i]))
+            self.play(
+                Wiggle(in_vars[i]),
+                Wiggle(y, scale_value = scale, rotation_angle=rot * TAU))
+
+            self.next_slide()
+
+        self.next_slide()
+        self.play(
+            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
+        )
+
+        bar = BarChart(values=[0.1, 0.5, 0.2], bar_names=[f"$x_{i+1}$" for i in range(3)]).scale(1.5)
+        self.play(Write(bar), run_time=2)
+
+        self.next_slide()
+        self.play(
+            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
+        )
     
     def construct(self):
-        #self.construct_titleslide()
-        #self.construct_toc_slide(chapter=1)
-        #self.construct_chapter1_1()
-        #self.construct_chapter1_2()
-        #self.construct_chapter1_3()
-        #self.construct_chapter1_4()
-        #self.construct_chapter1_5()
+        self.construct_titleslide()
+        self.construct_toc_slide(chapter=1)
+        self.construct_chapter1_1()
+        self.construct_chapter1_2()
+        self.construct_chapter1_3()
+        self.construct_chapter1_4()
+        # self.construct_chapter1_5()  # 3D SCENE
         self.construct_chapter1_6()
         self.construct_chapter1_7()
         self.construct_chapter1_8()
+        self.construct_chapter1_9()
+        self.construct_chapter1_10()
         self.construct_toc_slide(chapter=2)
 
 
