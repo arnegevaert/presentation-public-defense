@@ -646,7 +646,8 @@ voor elk van deze componenten hebben we een kleiner model
 dat we kunnen berekenen.
 Dan zou het al veel makkelijker zijn:
 we moeten gewoon de uitvoer van elke component 1 keer berekenen in plaats van 100.
-Het zijn er wel nog altijd veel: voor 7 variabelen zijn het er nog steeds 128.
+Het zijn er wel nog altijd veel: voor 3 variabelen zoals op de figuur zijn het er misschien maar 8,
+maar voor 7 variabelen zijn het er nog steeds 128.
 Maar daar kunnen we een beetje in snoeien.
 In de praktijk is het namelijk zo dat voor veel datasets en modellen,
 interacties tussen grote groepen variabelen eigenlijk redelijk zeldzaam zijn.

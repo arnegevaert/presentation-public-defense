@@ -78,6 +78,8 @@ def make_hasse(vertex_config=None, edge_config=None, labels=None):
     edges = []
     partitions = []
     n_elements = 3
+    if labels is None:
+        labels = False
 
     partitions = []
     vertices = []

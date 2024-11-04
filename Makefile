@@ -1,8 +1,8 @@
 quickbuild:
 	manim-slides render presentation.py Presentation -q l
+	manim-slides convert Presentation out/presentation.html
 build:
 	manim-slides render presentation.py Presentation -q h
-convert:
 	manim-slides convert Presentation out/presentation.html
 clean:
 	rm -rf out/*
@@ -10,5 +10,5 @@ clean:
 	rm -rf slides/*
 view:
 	vivaldi out/presentation.html
-run: build convert view
-preview: quickbuild convert view
+run: build view
+preview: quickbuild view

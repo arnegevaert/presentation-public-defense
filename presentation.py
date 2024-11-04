@@ -64,6 +64,28 @@ class PixelsAsCircles(VGroup):
 
 
 class Presentation(ThreeDSlide):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        self.subtitles = None
+
+    def set_subtitles(self, *texts):
+        result = []
+        if len(texts) == 0:
+            if len(self.subtitles) > 0:
+                result.append(FadeOut(self.subtitles, run_time=0.5))
+            self.subtitles = None
+        else:
+            if self.subtitles is not None:
+                result.append(FadeOut(self.subtitles, run_time=0.5))
+            self.subtitles = (
+                VGroup(*[Text(s, font_size=20) for s in texts])
+                .arrange(DOWN, buff=0)
+                .to_edge(UP, buff=0.1)
+            )
+            result.append(FadeIn(self.subtitles, run_time=0.5))
+        return result
+
     def cleanup_slide(self):
         self.next_slide()
         self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
@@ -101,6 +123,18 @@ class Presentation(ThreeDSlide):
         self.cleanup_slide()
 
     def construct_titleslide(self):
+        self.next_slide(loop=True)
+        g = make_hasse(
+            vertex_config={"radius": 0.3},
+            edge_config={"stroke_width": 10},
+        )
+        self.play(Write(g))
+        self.play(Wait())
+        self.play(FadeOut(g))
+
+        self.next_slide()
+        self.play(FadeOut(g))
+
         title1 = Text(
             "Unifying Attribution-Based Explanation Methods",
             color=WHITE,
@@ -115,7 +149,6 @@ class Presentation(ThreeDSlide):
             "Arne Gevaert - November 7th 2024", color=WHITE, font_size=24
         ).next_to(title2, DOWN)
 
-        self.next_slide()
         self.play(FadeIn(title1), FadeIn(title2))
         self.play(FadeIn(author_date))
         self.cleanup_slide()
@@ -126,7 +159,7 @@ class Presentation(ThreeDSlide):
         f = MathTex("f", font_size=100)
         self.next_slide()
 
-        self.play(Create(rect), Write(f))
+        self.play(Create(rect), Write(f), *self.set_subtitles("We make a function."))
 
         self.next_slide()
 
@@ -134,7 +167,12 @@ class Presentation(ThreeDSlide):
         out_arrow = Arrow(start=LEFT, end=RIGHT).next_to(rect, direction=RIGHT)
         x = MathTex("x", font_size=100).next_to(in_arrow, direction=LEFT)
         y = MathTex("y", font_size=100).next_to(out_arrow, direction=RIGHT)
-        self.play(DrawBorderThenFill(in_arrow, run_time=1), Write(x, run_time=1))
+        self.play(
+            DrawBorderThenFill(in_arrow, run_time=1),
+            Write(x, run_time=1),
+            *self.set_subtitles("It accepts arguments,", "and gives a result."),
+        )
+
         self.play(DrawBorderThenFill(out_arrow, run_time=1), Write(y, run_time=1))
 
         self.next_slide()
@@ -945,14 +983,15 @@ class Presentation(ThreeDSlide):
 
     def construct_chapter2_6(self):
         self.next_slide()
-        scale = 0.275
+        scale = 0.14
         imgs = [
-            ImageMobject("MNIST_default.png").scale(scale).shift(4.5 * LEFT),
+            ImageMobject("MNIST_default.png").scale(scale),
             ImageMobject("CIFAR10_default.png").scale(scale),
-            ImageMobject("ImageNet_default.png").scale(scale).shift(4.5 * RIGHT),
+            ImageMobject("ImageNet_default.png").scale(scale),
         ]
-        self.play(FadeIn(img) for img in imgs)
-
+        imgs[-1].set(height=imgs[0].height)
+        imgs_group = Group(*imgs).arrange(RIGHT)
+        self.play(FadeIn(imgs_group))
         self.next_slide()
         self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
 
@@ -1354,14 +1393,105 @@ class Presentation(ThreeDSlide):
 
     def construct_chapter4_4(self):
         self.next_slide()
-        eqn = MathTex(r"""
+        eqn = (
+            MathTex(
+                r"""
         f &= e_\emptyset\\
         &+ e_1 + e_2 + e_3 \\
         &+ i_{1,2} + i_{1,3} + i_{2,3} \\
         &+ i_{1,2,3} \\
-        """).to_edge(LEFT).shift(RIGHT)
+        """
+            )
+            .to_edge(LEFT)
+            .shift(RIGHT)
+        )
         self.play(Write(eqn))
-        
+
+        graph = (
+            make_hasse(
+                vertex_config={"radius": 0.3},
+                edge_config={"stroke_width": 10},
+                labels={
+                    0: MathTex(r"e_\emptyset", color=BLACK),
+                    1: MathTex(r"e_1", color=BLACK),
+                    2: MathTex(r"e_2", color=BLACK),
+                    3: MathTex(r"i_{1,2}", color=BLACK, font_size=35),
+                    4: MathTex(r"e_3", color=BLACK),
+                    5: MathTex(r"i_{1,3}", color=BLACK, font_size=35),
+                    6: MathTex(r"i_{2,3}", color=BLACK, font_size=35),
+                    7: MathTex(r"i_{1,2,3}", color=BLACK, font_size=25),
+                },
+            )
+            .to_edge(RIGHT)
+            .shift(LEFT)
+        )
+        self.play(Write(graph))
+
+        self.cleanup_slide()
+
+    def construct_chapter4_5(self):
+        self.next_slide()
+        title = Text("Three ingredients:", font_size=50).shift(2 * UP)
+        p = (
+            paragraph(
+                "1. Target: what to explain",
+                "2. Removal: how to remove features",
+                "3. Aggregation: how to summarize effects",
+                t2c={"1. Target:": BLUE, "2. Removal:": BLUE, "3. Aggregation:": BLUE},
+                font_size=35,
+            )
+            .to_edge(LEFT)
+            .shift(0.5 * RIGHT)
+        )
+
+        self.play(Write(title))
+        self.play(Write(p), run_time=4)
+
+        self.next_slide()
+        decomp = (
+            Text(
+                "2. Decomposition: how to decompose the function",
+                t2c={
+                    "2. Decomposition:": BLUE,
+                },
+                font_size=35,
+            )
+            .move_to(p[1])
+            .align_to(p[0], direction=LEFT)
+        )
+        self.play(Transform(p[1], decomp))
+
+        self.cleanup_slide()
+
+    def construct_chapter5_1(self):
+        self.next_slide()
+        title = Text("SHAP:", font_size=50).shift(2 * UP)
+
+        strs = [
+            "1. Target: output of $f$ at $x$",
+            "2. Removal: average output over dataset",
+            r"3. Aggregation: $\dots$",
+        ]
+        texts = (
+            VGroup(*[Tex(s) for s in strs])
+            .arrange(DOWN)
+            .to_edge(LEFT)
+            .shift(0.5 * RIGHT)
+        )
+
+        for text in texts[1:]:
+            text.align_to(texts[0], direction=LEFT)
+
+        self.play(Write(title))
+
+        for sentence in texts:
+            self.next_slide()
+            self.play(Write(sentence))
+
+        self.cleanup_slide()
+
+    def construct_chapter5_2(self):
+        self.next_slide()
         graph = make_hasse(
             vertex_config={"radius": 0.3},
             edge_config={"stroke_width": 10},
@@ -1373,38 +1503,65 @@ class Presentation(ThreeDSlide):
                 4: MathTex(r"e_3", color=BLACK),
                 5: MathTex(r"i_{1,3}", color=BLACK, font_size=35),
                 6: MathTex(r"i_{2,3}", color=BLACK, font_size=35),
-                7: MathTex(r"i_{1,2,3}", color=BLACK, font_size=25)
-            }
-        ).to_edge(RIGHT).shift(LEFT)
+                7: MathTex(r"i_{1,2,3}", color=BLACK, font_size=25),
+            },
+        ).to_edge(RIGHT)
         self.play(Write(graph))
 
-        self.cleanup_slide()
-
-    def construct_chapter4_6(self):
-        self.next_slide()
-        title = Text("Three ingredients:", font_size=50).shift(2 * UP)
-        p = paragraph(
-            "1. Target: what to explain",
-            "2. Removal: how to remove features",
-            "3. Aggregation: how to summarize effects",
-            t2c={
-                "1. Target:": BLUE,
-                "2. Removal:": BLUE,
-                "3. Aggregation:": BLUE
-            }, font_size=35
-        ).to_edge(LEFT).shift(0.5 * RIGHT)
-
-        self.play(Write(title))
-        self.play(Write(p), run_time=4)
+        eqn = MathTex(
+            r"\mathrm{SHAP}(f,1,\mathbf{x})",
+            r"&= e_1(\mathbf{x})\\",
+            r"&+ (i_{1,2}(\mathbf{x}) + i_{1,3}(\mathbf{x}))/2\\",
+            r"&+ i_{1,2,3}(\mathbf{x})/3",
+        ).to_edge(LEFT)
 
         self.next_slide()
-        decomp = Text("2. Decomposition: how to decompose the function",t2c={
-                "2. Decomposition:": BLUE,
-            }, font_size=35).move_to(p[1]).align_to(p[0], direction=LEFT)
-        self.play(Transform(p[1], decomp))
+        self.play(Write(eqn[0]))
+
+        self.next_slide()
+        self.play(Write(eqn[1]), Circumscribe(graph.vertices[1]))
+
+        self.next_slide()
+        self.play(
+            Write(eqn[2]),
+            Circumscribe(graph.vertices[3]),
+            Circumscribe(graph.vertices[5]),
+        )
+
+        self.next_slide()
+        self.play(Write(eqn[3]), Circumscribe(graph.vertices[7]))
 
         self.cleanup_slide()
 
+    def construct_chapter5_3(self):
+        self.next_slide()
+        graph = make_hasse(
+            vertex_config={"radius": 0.3},
+            edge_config={"stroke_width": 10},
+            labels={
+                0: MathTex(r"f_\emptyset", color=BLACK),
+                1: MathTex(r"f_1", color=BLACK),
+                2: MathTex(r"f_2", color=BLACK),
+                3: MathTex(r"f_{1,2}", color=BLACK, font_size=35),
+                4: MathTex(r"f_3", color=BLACK),
+                5: MathTex(r"f_{1,3}", color=BLACK, font_size=35),
+                6: MathTex(r"f_{2,3}", color=BLACK, font_size=35),
+                7: MathTex(r"f_{1,2,3}", color=BLACK, font_size=25)
+            }
+        )
+        self.play(Write(graph))
+        self.cleanup_slide()
+
+    def construct_chapter5_4(self):
+        self.next_slide()
+        img = ImageMobject("r2_scores.png").scale(0.4).to_edge(DOWN)
+        self.play(FadeIn(img))
+
+        self.next_slide()
+        self.play(FadeOut(img))
+        img2 = ImageMobject("inference_time.png").scale(0.4).to_edge(DOWN)
+        self.play(FadeIn(img2))
+        self.cleanup_slide()
 
     def construct(self):
         self.construct_titleslide()
@@ -1441,3 +1598,9 @@ class Presentation(ThreeDSlide):
         self.construct_chapter4_3()
         self.construct_chapter4_4()
         self.construct_chapter4_5()
+
+        self.construct_toc_slide(chapter=5)
+        self.construct_chapter5_1()
+        self.construct_chapter5_2()
+        self.construct_chapter5_3()
+        self.construct_chapter5_4()
