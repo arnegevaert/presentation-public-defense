@@ -1,12 +1,12 @@
 from manim import *
-from manim_slides import Slide, ThreeDSlide
-from sklearn.datasets import fetch_openml
+from manim_slides import ThreeDSlide
 from sklearn.metrics import root_mean_squared_error
 
 from util import (
     example_function_1,
     linreg_multivariate,
     linreg_univariate,
+    make_hasse,
     nn_reg,
     parabolic_reg,
     paragraph,
@@ -1164,25 +1164,247 @@ class Presentation(ThreeDSlide):
 
     def construct_chapter3_4(self):
         self.next_slide()
-        eqns = VGroup(*[
-            MathTex(r"\Phi(f)(\mathbf{x}) = f(\mathbf{x})", font_size=70),
-            Tex(r"$P_S(f)(\mathbf{x}) = $ average output over dataset", font_size=70),
-            MathTex(r"""
+        eqns = (
+            VGroup(
+                *[
+                    MathTex(r"\Phi(f)(\mathbf{x}) = f(\mathbf{x})", font_size=70),
+                    Tex(
+                        r"$P_S(f)(\mathbf{x}) = $ average output over dataset",
+                        font_size=70,
+                    ),
+                    MathTex(
+                        r"""
             \alpha_S = \begin{cases}
                 1 & \mbox{if } S = \emptyset \\
                 -1 & \mbox{if } S = \{i\}\\
                 0 & \mbox{otherwise.}
-            \end{cases}""", font_size=70)
-        ]).arrange(DOWN).to_edge(DOWN)
+            \end{cases}""",
+                        font_size=70,
+                    ),
+                ]
+            )
+            .arrange(DOWN)
+            .to_edge(DOWN)
+        )
         for eqn in eqns:
             self.next_slide()
             self.play(Write(eqn))
         self.cleanup_slide()
         self.next_slide()
 
-        full_eqn = Tex(r"$m(f,i,\mathbf{x})= \sum_{S \subseteq [d]} \alpha_{S}\Phi(P_{S}(f))(\mathbf{x})$", font_size=70),
+        full_eqn = Tex(
+            r"$m(f,i,\mathbf{x})= \sum_{S \subseteq [d]} \alpha_{S}\Phi(P_{S}(f))(\mathbf{x})$",
+            font_size=70,
+        )
+
         self.play(Write(full_eqn))
         self.cleanup_slide()
+
+    def construct_chapter4_1(self):
+        self.next_slide()
+        child_a = VGroup(
+            *[
+                SVGMobject("childa.svg").scale(2),
+                Text("A", font_size=75, fill_color=BLACK).shift(0.2 * DOWN),
+            ]
+        )
+        child_b = VGroup(
+            *[
+                SVGMobject("childb.svg").scale(2),
+                Text("B", font_size=75, fill_color=BLACK).shift(0.2 * DOWN),
+            ]
+        )
+        children = VGroup(*[child_a, child_b]).arrange(RIGHT)
+        self.play(Write(children))
+
+        self.next_slide()
+
+        eqns = VGroup(
+            *[
+                MathTex(r"b(\{\}) = 0"),
+                MathTex(r"b(\{A\}) = 25"),
+                MathTex(r"b(\{B\}) = 20"),
+                MathTex(r"b(\{A,B\}) = 5"),
+                MathTex(r"b(\{A,B\}) < b(\{A\}) + b(\{B\})"),
+                MathTex(r"i(\{A,B\}) &= b(\{A,B\}) - (b(\{A\}) + b(\{B\}))"),
+            ]
+        ).arrange(DOWN)
+
+        self.play(children.animate.to_corner(UL).shift(LEFT).scale(0.5))
+
+        for eqn in eqns[:-1]:
+            self.next_slide()
+            self.play(Write(eqn))
+
+        self.next_slide()
+        self.play(Transform(eqns[-2], MathTex(r"5 < 25 + 20").move_to(eqns[-2])))
+
+        self.next_slide()
+        self.play(Write(eqns[-1]))
+
+        self.next_slide()
+        self.play(
+            Transform(
+                eqns[-1], MathTex(r"i(\{A,B\}) = 5 - (25 + 20)").move_to(eqns[-1])
+            )
+        )
+
+        self.next_slide()
+        self.play(Transform(eqns[-1], MathTex(r"i(\{A,B\}) = -40").move_to(eqns[-1])))
+
+        self.cleanup_slide()
+
+    def construct_chapter4_2(self):
+        equations = MathTex(
+            r"f(\mathbf{x}) &= 2x_1 + 4x_2 - 3x_1x_2 + x_3 + 5\\",
+            r"P_{\{1,2,3\}}(f)(\mathbf{x})",
+            r"&= f(0,0,0)\\",
+            r"&= 2*0 + 4*0 - 3*0*0 + 0 + 5\\",
+            r"&= 5\\",
+            r"P_{\{2,3\}}(f)(\mathbf{x})",
+            r"&= f(x_1,0,0) \\",
+            r"&= 2x_1 + 4*0 - 3*x_1*0 + 0 + 5 \\",
+            r"&= 2x_1 + 5\\",
+            r"e_1(x_1)",
+            r"&= P_{\{2,3\}}(f)(\mathbf{x}) - P_{\{1,2,3\}}(f)(\mathbf{x}) \\",
+            r"&= 2x_1\\",
+            r"e_2(x_2) &= 4x_2\\",
+            r"e_3(x_3) &= x_3\\",
+            r"e_{1,2}(x_1,x_2)",
+            r"&= P_{\{3\}}(f)(\mathbf{x}) - P_{\{1,2,3\}}(f)(\mathbf{x})\\",
+            r"&= (2x_1 + 4x_2 - 3x_1x_2 + 0 + 5) - 5\\",
+            r"&= 2x_1 + 4x_2 - 3x_1x_2\\",
+            r"i_{1,2}(x_1,x_2)",
+            r"&= e_{1,2}(x_1,x_2) - (e_1(x_1) + e_2(x_2))\\",
+            r"&= (2x_1 + 4x_2 - 3x_1x_2) - (2x_1 + 4x_2)\\",
+            r"&= -3x_1x_2",
+        ).shift(4 * DOWN)
+
+        self.next_slide()
+        self.play(Write(equations[0]))
+
+        self.next_slide()
+        for eqn in equations[1:5]:
+            self.play(Write(eqn))
+
+        self.next_slide()
+        self.play(FadeOut(eqn) for eqn in equations[2:4])
+        self.play(
+            equations[4].animate.move_to(equations[2]).align_to(equations[2], LEFT)
+        )
+
+        self.next_slide()
+        for eqn in equations[5:9]:
+            self.play(Write(eqn.shift(1.5 * UP)))
+
+        self.next_slide()
+        self.play(FadeOut(eqn) for eqn in equations[6:8])
+        self.play(
+            equations[8].animate.move_to(equations[6]).align_to(equations[6], LEFT)
+        )
+
+        self.next_slide()
+        self.play(Write(equations[9].shift(3 * UP)))
+        self.play(Write(equations[10].shift(3 * UP)))
+
+        self.next_slide()
+        self.play(Write(equations[11].shift(3 * UP)))
+
+        self.next_slide()
+        self.play(FadeOut(equations[10]))
+        self.play(
+            equations[11].animate.move_to(equations[10]).align_to(equations[10], LEFT)
+        )
+
+        self.next_slide()
+        self.play(Write(equations[12].next_to(equations[11], RIGHT).shift(0.5 * RIGHT)))
+        self.play(Write(equations[13].next_to(equations[12], RIGHT).shift(0.5 * RIGHT)))
+
+        self.next_slide()
+        for eqn in equations[14:18]:
+            self.play(Write(eqn.shift(5.25 * UP)))
+
+        self.next_slide()
+        self.play(FadeOut(eqn) for eqn in equations[15:17])
+        self.play(
+            equations[17].animate.move_to(equations[15]).align_to(equations[15], LEFT)
+        )
+
+        self.next_slide()
+        for eqn in equations[18:22]:
+            self.play(Write(eqn.shift(6.75 * UP)))
+
+        self.next_slide()
+        self.play(FadeOut(eqn) for eqn in equations[19:21])
+        self.play(
+            equations[21].animate.move_to(equations[19]).align_to(equations[19], LEFT)
+        )
+
+        self.play(Wait())
+        self.cleanup_slide()
+
+    def construct_chapter4_3(self):
+        self.next_slide()
+        equations = MathTex(
+            r"f(\mathbf{x}) &= 2x_1 + 4x_2 - 3x_1x_2 + x_3 + 5\\",
+            r"&= e_1(x_1) + e_2(x_2) + i_{1,2}(x_1,x_2) + e_3(x_3) + 5",
+        )
+        self.play(Write(equations))
+        self.cleanup_slide()
+
+    def construct_chapter4_4(self):
+        self.next_slide()
+        eqn = MathTex(r"""
+        f &= e_\emptyset\\
+        &+ e_1 + e_2 + e_3 \\
+        &+ i_{1,2} + i_{1,3} + i_{2,3} \\
+        &+ i_{1,2,3} \\
+        """).to_edge(LEFT).shift(RIGHT)
+        self.play(Write(eqn))
+        
+        graph = make_hasse(
+            vertex_config={"radius": 0.3},
+            edge_config={"stroke_width": 10},
+            labels={
+                0: MathTex(r"e_\emptyset", color=BLACK),
+                1: MathTex(r"e_1", color=BLACK),
+                2: MathTex(r"e_2", color=BLACK),
+                3: MathTex(r"i_{1,2}", color=BLACK, font_size=35),
+                4: MathTex(r"e_3", color=BLACK),
+                5: MathTex(r"i_{1,3}", color=BLACK, font_size=35),
+                6: MathTex(r"i_{2,3}", color=BLACK, font_size=35),
+                7: MathTex(r"i_{1,2,3}", color=BLACK, font_size=25)
+            }
+        ).to_edge(RIGHT).shift(LEFT)
+        self.play(Write(graph))
+
+        self.cleanup_slide()
+
+    def construct_chapter4_6(self):
+        self.next_slide()
+        title = Text("Three ingredients:", font_size=50).shift(2 * UP)
+        p = paragraph(
+            "1. Target: what to explain",
+            "2. Removal: how to remove features",
+            "3. Aggregation: how to summarize effects",
+            t2c={
+                "1. Target:": BLUE,
+                "2. Removal:": BLUE,
+                "3. Aggregation:": BLUE
+            }, font_size=35
+        ).to_edge(LEFT).shift(0.5 * RIGHT)
+
+        self.play(Write(title))
+        self.play(Write(p), run_time=4)
+
+        self.next_slide()
+        decomp = Text("2. Decomposition: how to decompose the function",t2c={
+                "2. Decomposition:": BLUE,
+            }, font_size=35).move_to(p[1]).align_to(p[0], direction=LEFT)
+        self.play(Transform(p[1], decomp))
+
+        self.cleanup_slide()
+
 
     def construct(self):
         self.construct_titleslide()
@@ -1213,3 +1435,9 @@ class Presentation(ThreeDSlide):
         self.construct_chapter3_3()
         self.construct_chapter3_4()
 
+        self.construct_toc_slide(chapter=4)
+        self.construct_chapter4_1()
+        self.construct_chapter4_2()
+        self.construct_chapter4_3()
+        self.construct_chapter4_4()
+        self.construct_chapter4_5()

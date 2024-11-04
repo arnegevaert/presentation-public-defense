@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="266.67175"
+   height="479.16663"
+   viewBox="0 0 16.000305 28.749998"
+   fill="none"
+   version="1.1"
+   id="svg2"
+   sodipodi:docname="childa.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="namedview2"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.3794143"
+     inkscape:cx="-124.82063"
+     inkscape:cy="209.2952"
+     inkscape:window-width="3832"
+     inkscape:window-height="2152"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     d="m 12.000181,0.40549681 c 0,-0.2977 -0.3406,-0.49371 -0.6356,-0.3656 l -3.3644,1.46009999 -3.3645,-1.46009999 c -0.2949,-0.12811 -0.6355,0.0679 -0.6355,0.3656 V 2.5944968 c 0,0.2978 0.3406,0.4936 0.6355,0.3657 l 3.3645,-1.4602 3.3644,1.4602 c 0.295,0.1279 0.6356,-0.0679 0.6356,-0.3657 z m -4,9.84450019 c 1.933,0 3.5,-1.5670002 3.5,-3.5000002 0,-1.933 -1.567,-3.5 -3.5,-3.5 -1.933,0 -3.5,1.567 -3.5,3.5 0,1.933 1.567,3.5000002 3.5,3.5000002 z m -2.5,1.5 c -0.5016,0 -0.9699,0.2507 -1.2481,0.6679 l -4.00000004,6 c -0.4595,0.6893 -0.2733,1.6206 0.416,2.0802 0.68930004,0.4595 1.62060004,0.2732 2.08010004,-0.416 l 1.252,-1.8779 v 1.7958 l -2,4 h 2 v 3.25 c 0,0.8284 0.6715,1.5 1.5,1.5 0.8284,0 1.5,-0.6716 1.5,-1.5 v -3.25 h 2 v 3.25 c 0,0.8284 0.6715,1.5 1.5,1.5 0.8284,0 1.5,-0.6716 1.5,-1.5 v -3.25 h 2 l -2,-4 v -1.7958 l 1.2519,1.8779 c 0.4595,0.6892 1.3908,0.8755 2.0801,0.416 0.6893,-0.4596 0.8756,-1.3909 0.416,-2.0802 l -4,-6 c -0.2782,-0.4172 -0.7465,-0.6679 -1.248,-0.6679 z"
+     fill="#333333"
+     id="path2"
+     style="fill:#ffffff;fill-opacity:1" />
+</svg>

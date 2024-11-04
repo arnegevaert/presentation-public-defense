@@ -82,17 +82,22 @@ We zien ook dat de foutfunctie nu veel kleiner is dan daarnet.
 Zo'n functie waarvan de computer zelf de parameters heeft gekozen,
 noemen we in machine learning ook een *model.*
 
-- [ ] TODO: expliciet naar 2 veranderlijken met surface plot gaan en dan lopen we vast
-
 Nu denk je misschien, maar allez, we hadden die lijn nu toch ook wel met het blote oog kunnen tekenen.
 En dat klopt, maar dat gaat niet altijd lukken.
 Stel bijvoorbeeld dat we niet alleen de temperatuur bijhouden,
-maar ook hoeveel mensen er thuis zijn,
-en hoe hard de zon schijnt, want er liggen zonnepanelen op ons dak.
-Nu moeten we dus 3 getallen meegeven als invoer aan het model in plaats van 1.
-Die 3 getallen noemen we ook de *invoerveranderlijken.*
-Met 3 invoerveranderlijken kunnen we niet meer een grafiekje tekenen zoals daarnet,
-maar voor de computer is dit geen probleem.
+maar ook hoeveel mensen er thuis zijn.
+Dan hebben we twee getallen als invoer, oftewel twee *invoerveranderlijken.*
+Elk van deze veranderlijken krijgt een as, en dan krijgen we deze 3D-grafiek.
+Ieder punt komt overeen met een waarde voor temperatuur en aantal mensen.
+De hoogte van ieder punt is dan het energieverbruik.
+Hier kunnen we nog altijd een model door tekenen: we krijgen dan een vlak
+in plaats van een lijn.
+
+Stel nu dat we ook nog meten hoe hard de zon schijnt, want er liggen zonnepanelen op ons dak.
+Nu moeten hebben we dus 3 invoerveranderlijken.
+Dit kunnen we niet meer visueel weergeven, aangezien we jammer genoeg leven in 3 dimensies,
+en in totaal 4 dimensies zouden nodig hebben: 3 voor de invoer en 1 voor de uitvoer.
+Maar voor de computer is dit geen probleem.
 
 
 ### Intro part 3 (2m45s)
@@ -484,19 +489,19 @@ Kind A en Kind B zijn heel goede vrienden.
 Stel nu dat er een speelkamer vol legoblokken ligt, en die moeten opgeruimd worden.
 We hebben dan 4 mogelijke situaties.
 Als geen enkel kind opruimt, dan zijn er achteraf 0 legoblokken opgeruimd. Simpel.
-We kunnen dit schrijven als een functie l:
-als we de lege verzameling meegeven aan l, is de uitkomst 0 opgeruimde blokken.
-Als Kind A alleen opruimt, dan zijn er achteraf bijvoorbeeld 20 legoblokken opgeruimd.
-Dus: l(A) = 20.
+We kunnen dit schrijven als een functie b:
+als we de lege verzameling meegeven aan b, is de uitkomst 0 opgeruimde blokken.
+Als Kind A alleen opruimt, dan zijn er achteraf bijvoorbeeld 25 legoblokken opgeruimd.
+Dus: b(A) = 25.
 Dit noemen we ook het *direct effect* van Kind A.
-Op dezelfde manier ruimt Kind B bijvoorbeeld 25 blokken op: l(B) = 25.
+Op dezelfde manier ruimt Kind B bijvoorbeeld 20 blokken op: b(B) = 20.
 Maar, wat gaat er gebeuren als we Kind A en Kind B samen in de speelkamer plaatsen?
 Volgens mij gaan er bitter weinig blokken opgeruimd zijn.
-In dit geval is het aantal opgeruimde blokken 5, dus l(A,B) = 5.
+In dit geval is het aantal opgeruimde blokken 5, dus b(A,B) = 5.
 
 Wat er gebeurt in deze situatie is een *interactie,* meer bepaald een interactie tussen Kind A en Kind B
 waardoor het aantal opgeruimde blokken drastisch daalt.
-Wiskundig gezien krijgen we dat l(A,B) kleiner is dan l(A) + l(B),
+Wiskundig gezien krijgen we dat b(A,B) kleiner is dan b(A) + b(B),
 het aantal blokken dat ze samen opruimen is kleiner dan de som van het aantal blokken die ze elk apart opruimen.
 Dit verschil, namelijk 5 - (20 + 25) = -40, is het *interactie-effect* van het samenplaatsen van de 2 kinderen.
 Door de 2 kinderen te laten interageren, hebben we het aantal opgeruimde blokken doen dalen met 40.
@@ -548,6 +553,8 @@ en "additief" omdat de som van die deeltjes gelijk is aan f.
 
 Nu blijkt dat iedere functie die je kan verzinnen op een gelijkaardige manier gesplitst kan worden
 in een som van zo'n kleinere deelfuncties.
+Ik geef die decompositie hier schematisch weer: dit is het directe effect van x1,
+dit is het interactie-effect tussen x1 en x2, enzovoort.
 Daarnet heb ik nog uitgelegd dat,
 om een attributiemethode te ontwerpen,
 we een manier moeten kiezen om variabelen te verwijderen uit een model.
@@ -591,8 +598,6 @@ dat hebben we ook al gezien.
 De aggregatie van SHAP is ingewikkelder.
 Aangezien SHAP werkt door variabelen te verwijderen,
 maakt de methode achter de schermen ook een decompositie.
-Ik geef die decompositie hier schematisch weer: dit is het directe effect van x1,
-dit is het interactie-effect tussen x1 en x2, enzovoort.
 
 We kunnen nu de decompositie gebruiken om de SHAP-waarde voor een variabele te berekenen,
 laat ons bijvoorbeeld x1 kiezen hiervoor.
@@ -708,7 +713,6 @@ zodat die attributies veel sneller berekend kunnen worden.
 Dan wil ik u alleen nog bedanken voor uw aandacht.
 
 ## Notes
-- [ ] Ander woord voor "plek" op de huid?
-- [ ] "er zijn veel methoden/metrieken" => toon hoofdingen van papers
-- [ ] Eventueel verwijzing naar wout/lennert ipv Kind A, Kind B?
-- [ ] Visueel duidelijk maken waar ik zit
+- [ ] Use arrays in MathTex to make animations better
+- [ ] Use DecimalNumber for learning animations
+- [ ] Mention toeslagenaffaire in very beginning as a use case of XAI necessity
