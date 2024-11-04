@@ -79,7 +79,7 @@ class Presentation(ThreeDSlide):
             if self.subtitles is not None:
                 result.append(FadeOut(self.subtitles, run_time=0.5))
             self.subtitles = (
-                VGroup(*[Text(s, font_size=20) for s in texts])
+                VGroup(*[Tex(s, font_size=20) for s in texts])
                 .arrange(DOWN, buff=0)
                 .to_edge(UP, buff=0.1)
             )
@@ -88,7 +88,7 @@ class Presentation(ThreeDSlide):
 
     def cleanup_slide(self):
         self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas], run_time=0.5)
 
     def construct_toc_slide(self, chapter):
         contents_title = Text("Contents", color=BLACK, font_size=32).to_corner(UL)
@@ -107,7 +107,7 @@ class Presentation(ThreeDSlide):
             .shift(RIGHT)
         )
 
-        self.play(FadeIn(contents))
+        self.play(FadeIn(contents), run_time=0.5)
         self.next_slide()
         cur = contents[chapter - 1]
 
@@ -119,6 +119,7 @@ class Presentation(ThreeDSlide):
             FadeOut(contents[: chapter - 1]),
             FadeOut(contents[chapter:]),
             MoveToTarget(cur),
+            run_time=0.5
         )
         self.cleanup_slide()
 
@@ -1563,44 +1564,83 @@ class Presentation(ThreeDSlide):
         self.play(FadeIn(img2))
         self.cleanup_slide()
 
+    def construct_conclusion(self):
+        self.next_slide()
+        title = Text("Conclusion", font_size=50).shift(2 * UP)
+        benchmark1 = Text("1. Benchmark:", font_size=30, color=BLUE).shift(4 * LEFT)
+        benchmark2 = Text("there is no universal measure of quality", font_size=30).next_to(benchmark1, RIGHT).align_to(benchmark1, UP)
+
+        framework1 = Text("2. Framework: ", font_size=30, color=BLUE).next_to(benchmark1, DOWN).align_to(benchmark1, LEFT)
+        framework2 = Text("unifying removal-based attribution methods", font_size=30).align_to(benchmark2, LEFT).align_to(framework1, UP)
+        framework3 = Text("using functional decomposition", font_size=30).next_to(framework2, DOWN).align_to(benchmark2, LEFT)
+
+        pddshap1 = Text(
+            "3. PDD-SHAP:",
+            font_size=30, color=BLUE).next_to(framework3, DOWN).align_to(framework1, LEFT)
+        pddshap2 = Text(
+            "fast approximation algorithm",
+            font_size=30).align_to(benchmark2, LEFT).align_to(pddshap1, UP)
+        pddshap3 = Text(
+            "for existing attributions",
+            font_size=30).next_to(pddshap2, DOWN).align_to(benchmark2, LEFT)
+
+        self.play(Write(title), run_time=1)
+        self.next_slide()
+        self.play(Write(benchmark1), run_time=0.5)
+        self.play(Write(benchmark2), run_time=0.5)
+        self.next_slide()
+        self.play(Write(framework1), run_time=0.5)
+        self.play(Write(framework2), run_time=0.5)
+        self.play(Write(framework3), run_time=1)
+        self.next_slide()
+        self.play(Write(pddshap1), run_time=0.5)
+        self.play(Write(pddshap2), run_time=0.5)
+        self.play(Write(pddshap3), run_time=1)
+
+        self.cleanup_slide()
+
+
     def construct(self):
-        self.construct_titleslide()
-        self.construct_toc_slide(chapter=1)
+        # self.construct_titleslide()
+        # self.construct_toc_slide(chapter=1)
+        #
+        # self.construct_chapter1_1()
+        # self.construct_chapter1_2()
+        # self.construct_chapter1_3()
+        # self.construct_chapter1_4()
+        # self.construct_chapter1_5()  # 3D SCENE
+        # self.construct_chapter1_6()
+        # self.construct_chapter1_7()
+        # self.construct_chapter1_8()
+        # self.construct_chapter1_9()
+        # self.construct_chapter1_10()
+        #
+        # self.construct_toc_slide(chapter=2)
+        # self.construct_chapter2_1()
+        # self.construct_chapter2_2()
+        # self.construct_chapter2_3()
+        # self.construct_chapter2_4()
+        # self.construct_chapter2_5()
+        # self.construct_chapter2_6()
+        #
+        # self.construct_toc_slide(chapter=3)
+        # self.construct_chapter3_1()
+        # self.construct_chapter3_2()
+        # self.construct_chapter3_3()
+        # self.construct_chapter3_4()
+        #
+        # self.construct_toc_slide(chapter=4)
+        # self.construct_chapter4_1()
+        # self.construct_chapter4_2()
+        # self.construct_chapter4_3()
+        # self.construct_chapter4_4()
+        # self.construct_chapter4_5()
+        #
+        # self.construct_toc_slide(chapter=5)
+        # self.construct_chapter5_1()
+        # self.construct_chapter5_2()
+        # self.construct_chapter5_3()
+        # self.construct_chapter5_4()
 
-        self.construct_chapter1_1()
-        self.construct_chapter1_2()
-        self.construct_chapter1_3()
-        self.construct_chapter1_4()
-        self.construct_chapter1_5()  # 3D SCENE
-        self.construct_chapter1_6()
-        self.construct_chapter1_7()
-        self.construct_chapter1_8()
-        self.construct_chapter1_9()
-        self.construct_chapter1_10()
-
-        self.construct_toc_slide(chapter=2)
-        self.construct_chapter2_1()
-        self.construct_chapter2_2()
-        self.construct_chapter2_3()
-        self.construct_chapter2_4()
-        self.construct_chapter2_5()
-        self.construct_chapter2_6()
-
-        self.construct_toc_slide(chapter=3)
-        self.construct_chapter3_1()
-        self.construct_chapter3_2()
-        self.construct_chapter3_3()
-        self.construct_chapter3_4()
-
-        self.construct_toc_slide(chapter=4)
-        self.construct_chapter4_1()
-        self.construct_chapter4_2()
-        self.construct_chapter4_3()
-        self.construct_chapter4_4()
-        self.construct_chapter4_5()
-
-        self.construct_toc_slide(chapter=5)
-        self.construct_chapter5_1()
-        self.construct_chapter5_2()
-        self.construct_chapter5_3()
-        self.construct_chapter5_4()
+        self.construct_toc_slide(chapter=6)
+        self.construct_conclusion()
