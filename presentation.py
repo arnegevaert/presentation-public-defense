@@ -1,11 +1,19 @@
 from manim import *
 from manim_slides import Slide, ThreeDSlide
-from sklearn.metrics import root_mean_squared_error
 from sklearn.datasets import fetch_openml
+from sklearn.metrics import root_mean_squared_error
 
-from util import paragraph, example_function_1, linreg_univariate, linreg_multivariate, parabolic_reg, nn_reg
+from util import (
+    example_function_1,
+    linreg_multivariate,
+    linreg_univariate,
+    nn_reg,
+    parabolic_reg,
+    paragraph,
+)
 
 config.background_color = "#262626ff"
+
 
 class PixelsAsSquares(VGroup):
     def __init__(self, image_mobject, **kwargs):
@@ -13,18 +21,16 @@ class PixelsAsSquares(VGroup):
         for row in image_mobject.pixel_array:
             for val in row:
                 square = Square(
-                    stroke_width = 1,
-                    stroke_color = WHITE,
-                    stroke_opacity = 0.5,
-                    fill_opacity = val[0]/255.0,
-                    fill_color = WHITE,
+                    stroke_width=1,
+                    stroke_color=WHITE,
+                    stroke_opacity=0.5,
+                    fill_opacity=val[0] / 255.0,
+                    fill_color=WHITE,
                 )
                 self.add(square)
-        self.arrange_in_grid(
-            *image_mobject.pixel_array.shape[:2],
-            buff=0
-        )
+        self.arrange_in_grid(*image_mobject.pixel_array.shape[:2], buff=0)
         self.replace(image_mobject)
+
 
 class PixelsAsCircles(VGroup):
     def __init__(self, v_img, **kwargs):
@@ -32,13 +38,13 @@ class PixelsAsCircles(VGroup):
         self.neurons = []
         for pixel in v_img:
             neuron = Circle(
-                radius = pixel.width/2,
-                stroke_color = WHITE,
-                stroke_width = 1,
-                fill_color = WHITE,
-                fill_opacity = pixel.fill_opacity,
+                radius=pixel.width / 2,
+                stroke_color=WHITE,
+                stroke_width=1,
+                fill_color=WHITE,
+                fill_opacity=pixel.fill_opacity,
             )
-            neuron.rotate(3*np.pi/4)
+            neuron.rotate(3 * np.pi / 4)
             neuron.move_to(pixel)
             self.add(neuron)
             self.neurons.append(neuron)
@@ -48,27 +54,36 @@ class PixelsAsCircles(VGroup):
         nums = []
         for neuron in self.neurons:
             o = neuron.fill_opacity
-            num = DecimalNumber(o, num_decimal_places = 1)
-            num.set(width=0.7*neuron.width)
+            num = DecimalNumber(o, num_decimal_places=1)
+            num.set(width=0.7 * neuron.width)
             num.move_to(neuron)
             if o > 0.8:
                 num.set_fill(BLACK)
             nums.append(num)
         return nums
 
+
 class Presentation(ThreeDSlide):
+    def cleanup_slide(self):
+        self.next_slide()
+        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
+
     def construct_toc_slide(self, chapter):
         contents_title = Text("Contents", color=BLACK, font_size=32).to_corner(UL)
-        contents = paragraph(
-            f"1. Introduction",
-            f"2. Feature Attribution Benchmark",
-            f"3. Removal-Based Attribution Methods",
-            f"4. Functional Decomposition",
-            f"5. PDD-SHAP",
-            f"6. Conclusion",
-            color=WHITE,
-            font_size=24,
-        ).align_to(contents_title, LEFT).shift(RIGHT)
+        contents = (
+            paragraph(
+                f"1. Introduction",
+                f"2. Feature Attribution Benchmark",
+                f"3. Removal-Based Attribution Methods",
+                f"4. Functional Decomposition",
+                f"5. PDD-SHAP",
+                f"6. Conclusion",
+                color=WHITE,
+                font_size=24,
+            )
+            .align_to(contents_title, LEFT)
+            .shift(RIGHT)
+        )
 
         self.play(FadeIn(contents))
         self.next_slide()
@@ -79,12 +94,11 @@ class Presentation(ThreeDSlide):
         cur.target.scale(1.2)
 
         self.play(
-            FadeOut(contents[: chapter - 1]), FadeOut(contents[chapter:]), MoveToTarget(cur)
+            FadeOut(contents[: chapter - 1]),
+            FadeOut(contents[chapter:]),
+            MoveToTarget(cur),
         )
-
-        self.next_slide()
-        self.play(FadeOut(contents[chapter - 1]))
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_titleslide(self):
         title1 = Text(
@@ -104,13 +118,14 @@ class Presentation(ThreeDSlide):
         self.next_slide()
         self.play(FadeIn(title1), FadeIn(title2))
         self.play(FadeIn(author_date))
-        self.next_slide()
-        self.play(FadeOut(title1), FadeOut(title2), FadeOut(author_date))
+        self.cleanup_slide()
 
     def construct_chapter1_1(self):
         # GENERAL FUNCTION
         rect = Rectangle(width=5, height=3)
         f = MathTex("f", font_size=100)
+        self.next_slide()
+
         self.play(Create(rect), Write(f))
 
         self.next_slide()
@@ -149,11 +164,10 @@ class Presentation(ThreeDSlide):
             )
             self.next_slide()
 
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
-
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_chapter1_2(self):
+        self.next_slide()
         # GRAPH
         axis_config = {"include_ticks": True, "include_numbers": True}
         plane = NumberPlane(x_axis_config=axis_config, y_axis_config=axis_config)
@@ -200,12 +214,10 @@ class Presentation(ThreeDSlide):
             *[FadeOut(dot) for dot in dots],
             *[FadeOut(dot) for dot in red_dots],
         )
-
-        self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_chapter1_3(self):
+        self.next_slide()
         # Look at equation parameters
         eq = MathTex(
             "f(x) = 0.5 * x - 1", font_size=100, substrings_to_isolate=["0.5", "1"]
@@ -292,11 +304,10 @@ class Presentation(ThreeDSlide):
         eq5.set_color_by_tex("0.5", YELLOW)
         self.play(Transform(graph, graph5), Transform(eq, eq5))
 
-        self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_chapter1_4(self):
+        self.next_slide()
         # Draw axes
         axis_config = {
             "include_ticks": True,
@@ -346,11 +357,10 @@ class Presentation(ThreeDSlide):
         reg_line = plane.plot(lambda x: lm.predict(np.array(x).reshape(-1, 1))[0])
         self.play(Transform(rand_line, reg_line))
 
-        self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_chapter1_5(self):
+        self.next_slide()
         axes = ThreeDAxes()
         self.set_camera_orientation(theta=-45 * DEGREES, phi=75 * DEGREES)
         self.begin_ambient_camera_rotation(rate=75 * DEGREES / 4)
@@ -392,9 +402,7 @@ class Presentation(ThreeDSlide):
 
         self.play(Wait(run_time=3))
 
-        self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
-        self.next_slide()
+        self.cleanup_slide()
 
         self.set_camera_orientation(theta=-90 * DEGREES, phi=0)
         self.stop_ambient_camera_rotation()
@@ -486,28 +494,27 @@ class Presentation(ThreeDSlide):
             Transform(eqn_before, eqn_after), Transform(error_before, error_after)
         )
 
-        self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_chapter1_7(self):
         # ORIGINAL SETUP
         # Draw axes
-        axis_config = {"include_ticks": True, "include_numbers": True, }
+        axis_config = {
+            "include_ticks": True,
+            "include_numbers": True,
+        }
         plane = NumberPlane(
-            x_axis_config=axis_config, 
-            y_axis_config=axis_config, 
-            background_line_style={
-                "stroke_width": 4,
-                "stroke_opacity": 0.2
-            },
+            x_axis_config=axis_config,
+            y_axis_config=axis_config,
+            background_line_style={"stroke_width": 4, "stroke_opacity": 0.2},
             x_range=(-6, 22, 2),
             x_length=config.frame_width,
             y_range=(-1, 7),
-            y_length=config.frame_height)
+            y_length=config.frame_height,
+        )
 
         self.next_slide()
-        
+
         # Generate data
         def true_fn(x):
             return 5 - x / 4
@@ -523,20 +530,16 @@ class Presentation(ThreeDSlide):
             dots.append(dot)
 
         lm = linreg_univariate(x_points, y_points)
-        reg_line = plane.plot(lambda x: lm.predict(np.array(x).reshape(-1,1))[0])
+        reg_line = plane.plot(lambda x: lm.predict(np.array(x).reshape(-1, 1))[0])
 
-        self.play(
-            Write(plane),
-            *[Create(dot) for dot in dots],
-            Create(reg_line)
-        )
+        self.play(Write(plane), *[Create(dot) for dot in dots], Create(reg_line))
 
         self.next_slide()
 
         # CHANGE TO PARABOLIC DATA
         def parabola(x):
-            return x**2/15 - x + 4
-            
+            return x**2 / 15 - x + 4
+
         rng = np.random.default_rng(seed=0)
         noise = rng.normal(0, 0.5, len(x_points))
         y_parabola = parabola(x_points) + noise
@@ -551,7 +554,7 @@ class Presentation(ThreeDSlide):
         self.next_slide()
 
         lm_para = parabolic_reg(x_points, y_parabola)
-        para_line = plane.plot(lambda x: lm_para.predict(np.array(x).reshape(-1,1))[0])
+        para_line = plane.plot(lambda x: lm_para.predict(np.array(x).reshape(-1, 1))[0])
         self.play(Transform(reg_line, para_line))
 
         # TODO add equation showing added parameter
@@ -559,16 +562,18 @@ class Presentation(ThreeDSlide):
         # CHANGE TO MORE COMPLEX DATA
 
         self.next_slide()
-        
+
         self.play(FadeOut(reg_line))
+
         def noise_data(x):
             rng = np.random.default_rng(seed=0)
             noise = rng.normal(0, 2, len(x))
             return noise + 3.5
+
         y_noise = noise_data(x_points)
 
         self.next_slide()
-        
+
         for i in range(len(dots)):
             dot = dots[i]
             dot.generate_target()
@@ -576,22 +581,23 @@ class Presentation(ThreeDSlide):
         self.play(MoveToTarget(dot) for dot in dots)
 
         self.next_slide()
-        
+
         nn = nn_reg(x_points, y_noise)
-        nn_line = plane.plot(lambda x: nn.predict(np.array(x).reshape(-1,1))[0])
+        nn_line = plane.plot(lambda x: nn.predict(np.array(x).reshape(-1, 1))[0])
         self.play(Write(nn_line))
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter1_8(self):
+        self.next_slide()
+
         x_points = np.arange(-3, 19, 2)
+
         def noise_data(x):
             rng = np.random.default_rng(seed=0)
             noise = rng.normal(0, 2, len(x))
             return noise + 3.5
+
         y_noise = noise_data(x_points)
         nn = nn_reg(x_points, y_noise)
 
@@ -599,17 +605,20 @@ class Presentation(ThreeDSlide):
         l1_coefs = nn["predict"].coefs_[0].reshape(-1)
         l2_coefs = nn["predict"].coefs_[1].reshape(-1)
         l1_intercepts = nn["predict"].intercepts_[0].reshape(-1)
-        
+
         for i in range(25):
             substring = "{:.4f} * \\max(0, {:.4f} * x {} {:.4f})".format(
-                l2_coefs[i], l1_coefs[i], '+' if l1_intercepts[i] > 0 else '', l1_intercepts[i]
+                l2_coefs[i],
+                l1_coefs[i],
+                "+" if l1_intercepts[i] > 0 else "",
+                l1_intercepts[i],
             )
             if i % 2 == 0:
-                substring = substring + '\\\\ &'
+                substring = substring + "\\\\ &"
             if l2_coefs[i] > 0:
-                nn_string += '+'
+                nn_string += "+"
             nn_string += substring
-        
+
         formula = MathTex(nn_string).scale(1.5)
         self.play(Write(formula))
         self.next_slide()
@@ -619,21 +628,17 @@ class Presentation(ThreeDSlide):
 
         self.play(MoveToTarget(formula, run_time=5))
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
-        self.next_slide()
+        self.cleanup_slide()
 
     def construct_chapter1_9(self):
+        self.next_slide()
         title_text = Text("ChaptGPT (GPT-3.5):").shift(2 * UP)
         self.play(Write(title_text))
-        self.next_slide()
 
         num_text = Text("175", font_size=125)
         self.play(Write(num_text))
 
-        param_text = Text("parameters").next_to(num_text, 2*DOWN)
+        param_text = Text("parameters").next_to(num_text, 2 * DOWN)
         self.play(Write(param_text))
 
         self.next_slide()
@@ -641,17 +646,17 @@ class Presentation(ThreeDSlide):
         num_text.generate_target()
         num_text.target.shift(3 * LEFT)
         self.play(MoveToTarget(num_text))
-        billion = Text("billion", font_size=125, color=RED).next_to(num_text, 2*RIGHT)
+        billion = Text("billion", font_size=125, color=RED).next_to(num_text, 2 * RIGHT)
         self.play(Write(billion))
 
         self.next_slide()
-        cur_text = Text("ChatGPT-4: 1.75 trillion (estimated)").next_to(param_text, DOWN)
+        cur_text = Text("ChatGPT-4: 1.75 trillion (estimated)").next_to(
+            param_text, DOWN
+        )
         self.play(Write(cur_text))
 
         self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
 
         map_img = ImageMobject("distance.png").scale(0.4)
         dist_text = Text("687.8 km").next_to(map_img, DOWN)
@@ -659,78 +664,74 @@ class Presentation(ThreeDSlide):
 
         self.next_slide()
 
-        time_text = Text("Writing at 1 parameter per second: 55,492 years").scale(0.8).next_to(dist_text, DOWN)
+        time_text = (
+            Text("Writing at 1 parameter per second: 55,492 years")
+            .scale(0.8)
+            .next_to(dist_text, DOWN)
+        )
         self.play(Write(time_text))
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter1_10(self):
+        self.next_slide()
         rect = Rectangle(width=5, height=3)
         f = MathTex("f", font_size=100)
         self.play(Create(rect), Write(f))
-        
+
         self.next_slide()
 
         in_arrows, in_vars = [], []
         for i, direction in enumerate((UL, LEFT, DL)):
             arr = Arrow(start=direction, end=RIGHT).next_to(rect, direction=direction)
             in_arrows.append(arr)
-            in_vars.append(MathTex(f"x_{i+1}", font_size=100).next_to(arr, direction=direction))
+            in_vars.append(
+                MathTex(f"x_{i+1}", font_size=100).next_to(arr, direction=direction)
+            )
 
         out_arrow = Arrow(start=LEFT, end=RIGHT).next_to(rect, direction=RIGHT)
-        
+
         y = MathTex("y", font_size=100).next_to(out_arrow, direction=RIGHT)
-        
+
         self.play(
             *[DrawBorderThenFill(in_arrow, run_time=1) for in_arrow in in_arrows],
-            *[Write(x, run_time=1) for x in in_vars]
+            *[Write(x, run_time=1) for x in in_vars],
         )
-        self.play(
-            DrawBorderThenFill(out_arrow, run_time=1),
-            Write(y, run_time=1)
-        )
+        self.play(DrawBorderThenFill(out_arrow, run_time=1), Write(y, run_time=1))
 
         self.next_slide()
 
-        params = [
-            (0, 1.1, 0.01),
-            (1, 2, 0.06),
-            (2, 1.3, 0.02)
-        ]
-        
+        params = [(0, 1.1, 0.01), (1, 2, 0.06), (2, 1.3, 0.02)]
+
         for i, scale, rot in params:
             self.play(Circumscribe(in_vars[i]))
             self.play(
                 Wiggle(in_vars[i]),
-                Wiggle(y, scale_value = scale, rotation_angle=rot * TAU))
+                Wiggle(y, scale_value=scale, rotation_angle=rot * TAU),
+            )
 
             self.next_slide()
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
-        bar = BarChart(values=[0.1, 0.5, 0.2], bar_names=[f"$x_{i+1}$" for i in range(3)]).scale(1.5)
+        bar = BarChart(
+            values=[0.1, 0.5, 0.2], bar_names=[f"$x_{i+1}$" for i in range(3)]
+        ).scale(1.5)
         self.play(Write(bar), run_time=2)
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter2_1(self):
-        X = np.loadtxt("digits.csv", delimiter=',')
-        y = np.loadtxt("labels.csv", delimiter=',')
+        self.next_slide()
+        X = np.loadtxt("digits.csv", delimiter=",")
+        y = np.loadtxt("labels.csv", delimiter=",")
+
         def get_img(idx):
             img = ImageMobject(X[idx, :].reshape(28, 28)).scale(15)
             img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
             label = Text(f"Label: {int(y[idx])}")
             return img, label
-        
+
         imgs, labels = [], []
         for i in range(3):
             img, label = get_img(i)
@@ -744,9 +745,9 @@ class Presentation(ThreeDSlide):
 
         self.play(
             *[FadeOut(img) for img in (imgs[0], imgs[2])],
-            *[FadeOut(label) for label in labels]
+            *[FadeOut(label) for label in labels],
         )
-        
+
         img = imgs[1]
         img.generate_target()
         img.target.center()
@@ -754,47 +755,42 @@ class Presentation(ThreeDSlide):
         self.play(MoveToTarget(img))
 
         self.next_slide()
-        
+
         v_img = PixelsAsSquares(img)
-        self.play(
-            FadeOut(img),
-            FadeIn(v_img)
-        )
-        
+        self.play(FadeOut(img), FadeIn(v_img))
+
         circles = PixelsAsCircles(v_img)
         values = circles.get_values()
-        self.play(
-            ReplacementTransform(v_img, circles)
-        )
+        self.play(ReplacementTransform(v_img, circles))
         self.play(*[FadeIn(value) for value in values])
 
         self.next_slide()
 
         self.play(*[FadeOut(value) for value in values])
 
-        rows = VGroup(*[
-            VGroup(*circles.neurons[28*i:28*(i+1)])
-            for i in range(28)
-        ])
-
-        self.play(rows.animate.space_out_submobjects(1.2))
-        self.play(
-            rows.animate.arrange(RIGHT, buff = SMALL_BUFF),
-            run_time = 2
+        rows = VGroup(
+            *[VGroup(*circles.neurons[28 * i : 28 * (i + 1)]) for i in range(28)]
         )
 
-        summarized = VGroup(
-            *[Circle(stroke_color=WHITE, radius=0.25) for _ in range(7)],
-            MathTex(r"\dots", font_size=100),
-            *[Circle(stroke_color=WHITE, radius=0.25) for _ in range(3)]             
-        ).arrange(RIGHT).scale(20)
+        self.play(rows.animate.space_out_submobjects(1.2))
+        self.play(rows.animate.arrange(RIGHT, buff=SMALL_BUFF), run_time=2)
+
+        summarized = (
+            VGroup(
+                *[Circle(stroke_color=WHITE, radius=0.25) for _ in range(7)],
+                MathTex(r"\dots", font_size=100),
+                *[Circle(stroke_color=WHITE, radius=0.25) for _ in range(3)],
+            )
+            .arrange(RIGHT)
+            .scale(20)
+        )
         summarized.generate_target()
         summarized.target.scale(0.05)
         self.play(
             LaggedStart(
                 ShrinkToCenter(rows),
                 AnimationGroup(FadeIn(summarized), MoveToTarget(summarized)),
-                lag_ratio=0.5
+                lag_ratio=0.5,
             )
         )
 
@@ -810,11 +806,14 @@ class Presentation(ThreeDSlide):
         rect = Rectangle(width=5, height=3)
         f = MathTex("f", font_size=100)
         self.play(Create(rect), Write(f))
-        
+
         arrows = []
         for obj in summarized:
             if isinstance(obj, Circle):
-                arr = Line(start=obj.get_edge_center(RIGHT) + 0.2 * RIGHT, end=rect.get_edge_center(LEFT))
+                arr = Line(
+                    start=obj.get_edge_center(RIGHT) + 0.2 * RIGHT,
+                    end=rect.get_edge_center(LEFT),
+                )
                 arrows.append(arr)
         self.play(LaggedStart(*[Write(arr) for arr in arrows]))
 
@@ -823,62 +822,63 @@ class Presentation(ThreeDSlide):
         self.play(
             LaggedStart(
                 DrawBorderThenFill(out_arrow, run_time=1),
-                Write(y, run_time=1), lag_ratio=0.5
+                Write(y, run_time=1),
+                lag_ratio=0.5,
             )
         )
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter2_2(self):
+        self.next_slide()
         idx = 1
-        X = np.loadtxt("digits.csv", delimiter=',')
-        y = np.loadtxt("labels.csv", delimiter=',')
-        
+        X = np.loadtxt("digits.csv", delimiter=",")
+        y = np.loadtxt("labels.csv", delimiter=",")
+
         img = ImageMobject(X[idx, :].reshape(28, 28)).scale(25)
         img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
         img.to_edge(LEFT).shift(RIGHT)
         self.play(FadeIn(img))
 
         self.next_slide()
-        
+
         attrs = X[idx, :].reshape(28, 28)
         img_binarized = np.zeros((28, 28))
         img_binarized[attrs > 128] = 1
-        
+
         rng = np.random.default_rng(seed=0)
-        neg_noise = img_binarized * np.clip(rng.normal(loc=50, scale=25, size=(28, 28)), 0, 255)
+        neg_noise = img_binarized * np.clip(
+            rng.normal(loc=50, scale=25, size=(28, 28)), 0, 255
+        )
         attrs -= neg_noise
 
         pos_noise = (1 - img_binarized) * rng.uniform(low=0, high=30, size=(28, 28))
         attrs += pos_noise
-        
+
         attrs[13:17, 9:20] += rng.normal(loc=70, scale=20, size=(4, 11))
         attrs[14:16, 9:20] += rng.normal(loc=70, scale=20, size=(2, 11))
-        
+
         attr_img = ImageMobject(attrs).scale(25)
         attr_img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
         attr_img.to_edge(RIGHT).shift(LEFT)
         self.play(FadeIn(attr_img))
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter2_3(self):
+        self.next_slide()
         lesion_img = ImageMobject("lesion.png").scale(0.8).shift(LEFT * 5)
         self.play(FadeIn(lesion_img))
 
         # GENERAL FUNCTION
         rect = Rectangle(width=3, height=2)
         f = MathTex("f", font_size=100)
-        
+
         self.next_slide()
-        
-        in_arrow = Arrow(start=lesion_img.get_edge_center(RIGHT), end=rect.get_edge_center(LEFT))
+
+        in_arrow = Arrow(
+            start=lesion_img.get_edge_center(RIGHT), end=rect.get_edge_center(LEFT)
+        )
         out_arrow = Arrow(start=LEFT, end=RIGHT).next_to(rect, direction=RIGHT)
         y = Text("malignant?", font_size=35).next_to(out_arrow, direction=RIGHT)
         self.play(
@@ -886,27 +886,23 @@ class Presentation(ThreeDSlide):
                 DrawBorderThenFill(in_arrow, run_time=1),
                 AnimationGroup(Create(rect), Write(f)),
                 DrawBorderThenFill(out_arrow, run_time=1),
-                Write(y, run_time=1), lag_ratio=0.5
+                Write(y, run_time=1),
+                lag_ratio=0.5,
             )
         )
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter2_4(self):
+        self.next_slide()
         lesion_img = ImageMobject("lesions.png").scale(0.8).shift(UP)
         self.play(FadeIn(lesion_img))
 
         self.next_slide()
         markings_img = ImageMobject("markings.png").scale(0.8).shift(DOWN * 2)
         self.play(FadeIn(markings_img))
-        
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+
+        self.cleanup_slide()
 
     def construct_chapter2_5(self):
         self.next_slide()
@@ -923,59 +919,67 @@ class Presentation(ThreeDSlide):
             (0, 0),
             (0, 2),
         ]
-        
+
         for i in range(9):
             x, y = coords[i]
-            img = ImageMobject(f"method{i+1}.png", ).move_to((x, y, 0))
+            img = ImageMobject(
+                f"method{i+1}.png",
+            ).move_to((x, y, 0))
             img.width = 6
             imgs.append(img)
         self.play(LaggedStart(*[FadeIn(img) for img in imgs], lag_ratio=0.8))
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
         imgs = []
         for i in range(9):
             x, y = coords[i]
-            img = ImageMobject(f"metric{i+1}.png", ).move_to((x, y, 0))
+            img = ImageMobject(
+                f"metric{i+1}.png",
+            ).move_to((x, y, 0))
             img.width = 6
             imgs.append(img)
         self.play(LaggedStart(*[FadeIn(img) for img in imgs], lag_ratio=0.8))
 
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.cleanup_slide()
 
     def construct_chapter2_6(self):
         self.next_slide()
         scale = 0.275
         imgs = [
-            ImageMobject("MNIST_default.png").scale(scale).shift(4.5*LEFT),
+            ImageMobject("MNIST_default.png").scale(scale).shift(4.5 * LEFT),
             ImageMobject("CIFAR10_default.png").scale(scale),
-            ImageMobject("ImageNet_default.png").scale(scale).shift(4.5*RIGHT)
+            ImageMobject("ImageNet_default.png").scale(scale).shift(4.5 * RIGHT),
         ]
         self.play(FadeIn(img) for img in imgs)
 
         self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas])
 
         text = Text("There is no universal measure of quality!", font_size=45)
         self.play(Write(text))
-        
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+
+        self.cleanup_slide()
 
     def construct_chapter3_1(self):
-        variables = VGroup(*[
-            Text(name, font_size=24) for name in ["Length", "Weight", "Age", "Blood pressure", "Cholesterol"]
-        ]).arrange(DOWN, buff=0.5).to_edge(LEFT).shift(0.25 * RIGHT)
+        self.next_slide()
+        variables = (
+            VGroup(
+                *[
+                    Text(name, font_size=24)
+                    for name in [
+                        "Length",
+                        "Weight",
+                        "Age",
+                        "Blood pressure",
+                        "Cholesterol",
+                    ]
+                ]
+            )
+            .arrange(DOWN, buff=0.5)
+            .to_edge(LEFT)
+            .shift(0.25 * RIGHT)
+        )
         for var in variables[1:]:
             var.align_to(variables[0], direction=RIGHT)
 
@@ -984,102 +988,99 @@ class Presentation(ThreeDSlide):
         # GENERAL FUNCTION
         rect = Rectangle(width=5, height=3)
         f = MathTex("f", font_size=100)
-        
+
         arrows = []
         for obj in variables:
-            arr = Line(start=obj.get_edge_center(RIGHT) + 0.2 * RIGHT, end=rect.get_edge_center(LEFT))
+            arr = Line(
+                start=obj.get_edge_center(RIGHT) + 0.2 * RIGHT,
+                end=rect.get_edge_center(LEFT),
+            )
             arrows.append(arr)
-        
+
         out_arrow = Arrow(start=LEFT, end=0.5 * RIGHT).next_to(rect, direction=RIGHT)
         y = Text("Diabetes risk", font_size=35).next_to(out_arrow, direction=RIGHT)
         self.play(
-            LaggedStart(*[Write(arr) for arr in arrows],
-                        AnimationGroup(Create(rect), Write(f)),
-                        DrawBorderThenFill(out_arrow, run_time=1),
-                        Write(y, run_time=1)
-                       )
+            LaggedStart(
+                *[Write(arr) for arr in arrows],
+                AnimationGroup(Create(rect), Write(f)),
+                DrawBorderThenFill(out_arrow, run_time=1),
+                Write(y, run_time=1),
+            )
         )
 
         self.next_slide()
-        
-        variables_new = VGroup(*[
-            MathTex(name, font_size=44) for name in ["L=195", "W=85", "A=45", "B=135", "C=110"]
-        ]).arrange(DOWN, buff=0.5).to_edge(LEFT).shift(0.5 * RIGHT)
+
+        variables_new = (
+            VGroup(
+                *[
+                    MathTex(name, font_size=44)
+                    for name in ["L=195", "W=85", "A=45", "B=135", "C=110"]
+                ]
+            )
+            .arrange(DOWN, buff=0.5)
+            .to_edge(LEFT)
+            .shift(0.5 * RIGHT)
+        )
 
         y_new = Text("High risk", font_size=35).next_to(out_arrow, direction=RIGHT)
 
         self.play(
             ReplacementTransform(variables, variables_new),
-            ReplacementTransform(y, y_new)
+            ReplacementTransform(y, y_new),
         )
 
         self.next_slide()
 
         variables_new[0].generate_target()
         variables_new[0].target.color = BLUE
-        self.play(
-            Circumscribe(variables_new[0]), MoveToTarget(variables_new[0])
-        )
+        self.play(Circumscribe(variables_new[0]), MoveToTarget(variables_new[0]))
 
         self.next_slide()
 
         length = variables_new[0]
         no_length = MathTex(r"L = ???", font_size=44, color=BLUE).move_to(length)
         no_output = Text("???", font_size=35).next_to(out_arrow, direction=RIGHT)
-        self.play(
-            Transform(length, no_length),
-            Transform(y_new, no_output)
-        )
+        self.play(Transform(length, no_length), Transform(y_new, no_output))
 
         self.next_slide()
 
         zero_length = MathTex("L = 0", font_size=44, color=BLUE).move_to(length)
         y_zero = Text("Low risk", font_size=35).next_to(out_arrow, direction=RIGHT)
-        self.play(
-            Transform(length, zero_length),
-            Transform(y_new, y_zero)
-        )
+        self.play(Transform(length, zero_length), Transform(y_new, y_zero))
 
         self.next_slide()
 
-        values = [9, 41, 24, 38, '...']
-        outputs = [
-            "Low risk",
-            "High risk",
-            "Low risk",
-            "High risk",
-            "..."
-        ]
+        values = [9, 41, 24, 38, "..."]
+        outputs = ["Low risk", "High risk", "Low risk", "High risk", "..."]
         for value, output in zip(values, outputs):
-            new_length = MathTex(f"L = {value}", font_size=44, color=BLUE).move_to(length)
-            new_output = Text(output, font_size=35).next_to(out_arrow, direction=RIGHT)
-            self.play(
-                Transform(length, new_length),
-                Transform(y_new, new_output)
+            new_length = MathTex(f"L = {value}", font_size=44, color=BLUE).move_to(
+                length
             )
+            new_output = Text(output, font_size=35).next_to(out_arrow, direction=RIGHT)
+            self.play(Transform(length, new_length), Transform(y_new, new_output))
 
         self.next_slide()
 
         orig_length = MathTex(f"L = 195", font_size=44).move_to(length)
         orig_out = Text("High risk", font_size=35).next_to(out_arrow, direction=RIGHT)
-        self.play(
-            Transform(length, orig_length),
-            Transform(y_new, orig_out)
-        )
+        self.play(Transform(length, orig_length), Transform(y_new, orig_out))
 
         self.next_slide()
 
-        new_f = Tex(r"""
+        new_f = Tex(
+            r"""
         IF $B > 130$ OR $C > 100$\\
         THEN High risk\\ELSE Low risk
-        """, font_size=40)
+        """,
+            font_size=40,
+        )
 
         self.play(Transform(f, new_f))
 
         self.next_slide()
 
-        bp_values = [120, 110, 140, 130, '...']
-        c_values = [100, 105, 115, 90, '...']
+        bp_values = [120, 110, 140, 130, "..."]
+        c_values = [100, 105, 115, 90, "..."]
 
         bp = variables_new[3]
         c = variables_new[4]
@@ -1090,7 +1091,7 @@ class Presentation(ThreeDSlide):
             )
         orig_bp = MathTex(f"B = 135", font_size=44).move_to(bp)
         self.play(Transform(bp, orig_bp))
-        
+
         for value in c_values:
             new_c = MathTex(f"C = {value}", font_size=44, color=BLUE).move_to(c)
             self.play(
@@ -1098,32 +1099,95 @@ class Presentation(ThreeDSlide):
             )
         orig_c = MathTex(f"C = 110", font_size=44).move_to(c)
         self.play(Transform(c, orig_c))
-        
-        self.next_slide()
-        self.play(
-            *[FadeOut(obj) for obj in self.mobjects_without_canvas]
-        )
+
+        self.cleanup_slide()
 
     def construct_chapter3_2(self):
+        self.next_slide()
         title = Text("Three ingredients:", font_size=50).shift(2 * UP)
-        p = paragraph(
-            "1. Target: what to explain",
-            "2. Removal: how to remove features",
-            "3. Aggregation: how to summarize effects",
-            t2c={
-                "1. Target:": BLUE,
-                "2. Removal:": BLUE,
-                "3. Aggregation:": BLUE
-            }
-        ).to_edge(LEFT).shift(0.5 * RIGHT)
+        p = (
+            paragraph(
+                "1. Target: what to explain",
+                "2. Removal: how to remove features",
+                "3. Aggregation: how to summarize effects",
+                t2c={"1. Target:": BLUE, "2. Removal:": BLUE, "3. Aggregation:": BLUE},
+            )
+            .to_edge(LEFT)
+            .shift(0.5 * RIGHT)
+        )
 
         self.play(Write(title))
         self.play(Write(p), run_time=6)
 
+        self.cleanup_slide()
+
+    def construct_chapter3_3(self):
+        self.next_slide()
+        eqn = VGroup(
+            *[
+                Tex(r"$m(f,i,\mathbf{x})$", font_size=70),
+                Tex(
+                    r"$= \sum_{S \subseteq [d]} \alpha_{S}\Phi(P_{S}(f))(\mathbf{x})$",
+                    font_size=70,
+                ),
+            ]
+        ).arrange(RIGHT)
+        eqn[1].shift(0.075 * DOWN)
+        self.play(Write(eqn))
+
+        self.next_slide()
+
+        lhs, rhs = eqn
+        self.play(FadeOut(rhs))
+        orig_point = lhs.get_center()
+        self.play(lhs.animate.center())
+
+        self.next_slide()
+
+        rhss = [
+            r"$= f(\mathbf{x})$",
+            r"$= P_{S}(f)(\mathbf{x})$",
+            r"$= \Phi(P_{S}(f))(\mathbf{x})$",
+            r"$= \alpha_{S}\Phi(P_{S}(f))(\mathbf{x})$",
+            r"$= \sum_{S \subseteq [d]} \alpha_{S}\Phi(P_{S}(f))(\mathbf{x})$",
+        ]
+
+        rhs1 = Tex(r"$=f$", font_size=70).move_to(rhs.get_center())
+        self.play(lhs.animate.move_to(orig_point))
+        self.play(FadeIn(rhs1))
+
+        for rhsi in rhss[1:]:
+            self.next_slide()
+            rhs_tex = Tex(rhsi, font_size=70).move_to(rhs.get_center())
+            self.play(Transform(rhs1, rhs_tex))
+        self.cleanup_slide()
+
+    def construct_chapter3_4(self):
+        self.next_slide()
+        eqns = VGroup(*[
+            MathTex(r"\Phi(f)(\mathbf{x}) = f(\mathbf{x})", font_size=70),
+            Tex(r"$P_S(f)(\mathbf{x}) = $ average output over dataset", font_size=70),
+            MathTex(r"""
+            \alpha_S = \begin{cases}
+                1 & \mbox{if } S = \emptyset \\
+                -1 & \mbox{if } S = \{i\}\\
+                0 & \mbox{otherwise.}
+            \end{cases}""", font_size=70)
+        ]).arrange(DOWN).to_edge(DOWN)
+        for eqn in eqns:
+            self.next_slide()
+            self.play(Write(eqn))
+        self.cleanup_slide()
+        self.next_slide()
+
+        full_eqn = Tex(r"$m(f,i,\mathbf{x})= \sum_{S \subseteq [d]} \alpha_{S}\Phi(P_{S}(f))(\mathbf{x})$", font_size=70),
+        self.play(Write(full_eqn))
+        self.cleanup_slide()
+
     def construct(self):
         self.construct_titleslide()
         self.construct_toc_slide(chapter=1)
-        
+
         self.construct_chapter1_1()
         self.construct_chapter1_2()
         self.construct_chapter1_3()
@@ -1134,7 +1198,7 @@ class Presentation(ThreeDSlide):
         self.construct_chapter1_8()
         self.construct_chapter1_9()
         self.construct_chapter1_10()
-        
+
         self.construct_toc_slide(chapter=2)
         self.construct_chapter2_1()
         self.construct_chapter2_2()
@@ -1146,3 +1210,6 @@ class Presentation(ThreeDSlide):
         self.construct_toc_slide(chapter=3)
         self.construct_chapter3_1()
         self.construct_chapter3_2()
+        self.construct_chapter3_3()
+        self.construct_chapter3_4()
+

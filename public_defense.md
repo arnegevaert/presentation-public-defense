@@ -455,8 +455,14 @@ We waren geinteresseerd in de uitvoer van het model f zelf:
 dus Phi(f) geeft ons gewoon de functie f terug.
 We verwijderden variabelen door alle mogelijke waarden in te vullen en een gemiddelde te nemen van de uitvoer:
 dit is P_T.
-En we keken naar iedere variabele apart, dus de alpha's waren gewoon 0 voor alle verzamelingen met meerdere variabelen,
-en 1 voor de verzameling die overeenkomt met de variabele i.
+En we keken naar iedere variabele apart,
+dus de alpha's waren 1 voor de lege verzameling,
+-1 voor de verzameling die overeenkomt met de variabele i,
+en 0 voor al de rest.
+Zo krijgen we dus: 1 keer de uitvoer van f zonder variabelen te verwijderen,
+min 1 keer de uitvoer van f als i verwijderd is,
+of met andere woorden,
+het verschil in uitvoer als we i verwijderen.
 
 In mijn doctoraat heb ik nu wiskundig kunnen bewijzen
 dat tientallen attributiemethodes die in de laatste 10 a 15 jaar zijn uitgevonden,
