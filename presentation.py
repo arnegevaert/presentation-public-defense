@@ -66,6 +66,8 @@ class PixelsAsCircles(VGroup):
 class Presentation(ThreeDSlide):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.default_run_time = 0.8
+        self.long_run_time = 2 * self.default_run_time
 
         self.subtitles = None
 
@@ -78,17 +80,34 @@ class Presentation(ThreeDSlide):
         else:
             if self.subtitles is not None:
                 result.append(FadeOut(self.subtitles, run_time=0.5))
-            self.subtitles = (
-                VGroup(*[Tex(s, font_size=20) for s in texts])
-                .arrange(DOWN, buff=0)
-                .to_edge(UP, buff=0.1)
+            subs = (
+                VGroup(*[Tex(s, font_size=30) for s in texts])
+                .arrange(DOWN, buff=0.1)
+                .to_edge(UP, buff=0.2)
+            ).set_z_index(2)
+            padding = 0.2
+            square = (
+                Rectangle(
+                    stroke_opacity=0,
+                    fill_color=config.background_color,
+                    fill_opacity=0.7,
+                    width=subs.width + padding,
+                    height=subs.height + padding,
+                )
+                .move_to(subs.get_center())
+                .set_z_index(subs.z_index - 1)
             )
+            self.subtitles = VGroup(subs, square)
             result.append(FadeIn(self.subtitles, run_time=0.5))
         return result
 
     def cleanup_slide(self):
         self.next_slide()
-        self.play(*[FadeOut(obj) for obj in self.mobjects_without_canvas], run_time=0.5)
+        self.play(
+            *[FadeOut(obj) for obj in self.mobjects_without_canvas],
+            run_time=self.default_run_time,
+        )
+        self.subtitles = None
 
     def construct_toc_slide(self, chapter):
         contents_title = Text("Contents", color=BLACK, font_size=32).to_corner(UL)
@@ -107,7 +126,7 @@ class Presentation(ThreeDSlide):
             .shift(RIGHT)
         )
 
-        self.play(FadeIn(contents), run_time=0.5)
+        self.play(FadeIn(contents), run_time=self.default_run_time)
         self.next_slide()
         cur = contents[chapter - 1]
 
@@ -119,17 +138,17 @@ class Presentation(ThreeDSlide):
             FadeOut(contents[: chapter - 1]),
             FadeOut(contents[chapter:]),
             MoveToTarget(cur),
-            run_time=0.5
+            run_time=self.default_run_time,
         )
         self.cleanup_slide()
 
     def construct_titleslide(self):
         self.next_slide(loop=True)
         g = make_hasse(
-            vertex_config={"radius": 0.3},
-            edge_config={"stroke_width": 10},
+            vertex_config={"radius": 0.3, "color": GREY},
+            edge_config={"stroke_width": 10, "color": GREY},
         )
-        self.play(Write(g))
+        self.play(Write(g), run_time=3)
         self.play(Wait())
         self.play(FadeOut(g))
 
@@ -155,12 +174,52 @@ class Presentation(ThreeDSlide):
         self.cleanup_slide()
 
     def construct_chapter1_1(self):
+        self.next_slide()
+        rutte = ImageMobject("rutte.png").scale(0.55).shift(DOWN * 0.5)
+        self.play(
+            *self.set_subtitles(
+                """
+            On January 15, 2021, the Dutch third Rutte cabinet resigned.
+            The main reason was the so-called ``toeslagenaffaire'', or childcare benefits scandal.
+            """
+            ),
+            FadeIn(rutte, run_time=self.default_run_time),
+        )
+
+        self.next_slide()
+        self.play(
+            *self.set_subtitles(
+                """
+            In this scandal, thousands of people were falsely accused of fraud by an AI system.
+            This AI system turned out to be biased in important ways.
+            """
+            )
+        )
+
+        self.next_slide()
+        self.play(
+            *self.set_subtitles(
+                """
+            This illustrates the need for Explainable AI, or XAI.
+            In this presentation, I will focus on ``attribution-based'' explanations specifically.
+            """
+            )
+        )
+
         # GENERAL FUNCTION
         rect = Rectangle(width=5, height=3)
         f = MathTex("f", font_size=100)
         self.next_slide()
 
-        self.play(Create(rect), Write(f), *self.set_subtitles("We make a function."))
+        self.play(FadeOut(rutte, run_time=self.default_run_time))
+        self.play(
+            Create(rect),
+            Write(f),
+            *self.set_subtitles(
+                "Before we begin, we take a look at a function. A function is like a machine: it takes an input, and produces an output."
+            ),
+            run_time=self.default_run_time,
+        )
 
         self.next_slide()
 
@@ -169,19 +228,24 @@ class Presentation(ThreeDSlide):
         x = MathTex("x", font_size=100).next_to(in_arrow, direction=LEFT)
         y = MathTex("y", font_size=100).next_to(out_arrow, direction=RIGHT)
         self.play(
-            DrawBorderThenFill(in_arrow, run_time=1),
-            Write(x, run_time=1),
-            *self.set_subtitles("It accepts arguments,", "and gives a result."),
+            DrawBorderThenFill(in_arrow), Write(x), run_time=self.default_run_time
         )
 
-        self.play(DrawBorderThenFill(out_arrow, run_time=1), Write(y, run_time=1))
+        self.play(
+            DrawBorderThenFill(out_arrow), Write(y), run_time=self.default_run_time
+        )
 
         self.next_slide()
 
         # EXAMPLE FUNCTION
         fun, fmt_str = example_function_1()
         ex_f = MathTex(fmt_str.format("x", "x"))
-        self.play(Transform(f, ex_f))
+        self.play(
+            Transform(f, ex_f, run_time=self.default_run_time),
+            *self.set_subtitles(
+                "The ``instructions'' of the machine can be expressed in an equation."
+            ),
+        )
 
         self.next_slide()
 
@@ -200,6 +264,7 @@ class Presentation(ThreeDSlide):
                 Transform(x, in_tex),
                 Transform(y, out_tex),
                 Transform(f, ex_f_transformed),
+                run_time=self.default_run_time,
             )
             self.next_slide()
 
@@ -210,7 +275,13 @@ class Presentation(ThreeDSlide):
         # GRAPH
         axis_config = {"include_ticks": True, "include_numbers": True}
         plane = NumberPlane(x_axis_config=axis_config, y_axis_config=axis_config)
-        self.play(Write(plane))
+        self.play(
+            Write(plane),
+            *self.set_subtitles(
+                "We can show this visually by drawing a dot for each input-output pair."
+            ),
+            run_time=3 * self.default_run_time,
+        )
 
         self.next_slide()
 
@@ -224,10 +295,17 @@ class Presentation(ThreeDSlide):
             dot.target.shift(out * UP)
             red_dots.append(dot)
 
-        self.play(*[DrawBorderThenFill(dot, run_time=0.5) for dot in red_dots])
+        self.play(
+            *[
+                DrawBorderThenFill(dot, run_time=self.default_run_time)
+                for dot in red_dots
+            ]
+        )
 
         self.next_slide()
-        self.play(*[MoveToTarget(dot) for dot in red_dots])
+        self.play(
+            *[MoveToTarget(dot, run_time=self.default_run_time) for dot in red_dots]
+        )
 
         self.next_slide()
 
@@ -241,7 +319,10 @@ class Presentation(ThreeDSlide):
 
         self.next_slide()
 
-        self.play(*[DrawBorderThenFill(dot, run_time=0.5) for dot in dots])
+        self.play(
+            *[DrawBorderThenFill(dot, run_time=self.default_run_time) for dot in dots],
+            *self.set_subtitles("Repeating this for all inputs, we get a line."),
+        )
 
         self.next_slide()
         self.play(LaggedStart(*[MoveToTarget(dot) for dot in dots], lag_ratio=0.01))
@@ -261,7 +342,13 @@ class Presentation(ThreeDSlide):
         eq = MathTex(
             "f(x) = 0.5 * x - 1", font_size=100, substrings_to_isolate=["0.5", "1"]
         )
-        self.play(Write(eq))
+        self.play(
+            Write(eq),
+            *self.set_subtitles(
+                "Let's take another look at the function. We see that it has 2 parameters."
+            ),
+            run_time=self.long_run_time
+        )
         self.next_slide()
 
         params = ["0.5", "1"]
@@ -270,7 +357,7 @@ class Presentation(ThreeDSlide):
             p = eq.get_parts_by_tex(param)
             p.generate_target()
             p.target.set_color(YELLOW)
-            self.play(Circumscribe(p), MoveToTarget(p))
+            self.play(Circumscribe(p), MoveToTarget(p), run_time=self.default_run_time)
             self.next_slide()
 
         # Show influence on line
@@ -283,8 +370,8 @@ class Presentation(ThreeDSlide):
         eq.generate_target()
         eq.target.to_corner(UL).shift(2 * LEFT).scale(0.5)
         graph = plane.plot(lambda x: 0.5 * x - 1, color=WHITE)
-        self.play(Write(plane), MoveToTarget(eq))
-        self.play(Create(graph))
+        self.play(Write(plane), MoveToTarget(eq), run_time=self.long_run_time)
+        self.play(Create(graph), run_time=self.default_run_time)
 
         self.next_slide()
 
@@ -296,7 +383,14 @@ class Presentation(ThreeDSlide):
             .scale(0.5)
         )
         eq2.set_color_by_tex("1", YELLOW)
-        self.play(Transform(graph, graph2), Transform(eq, eq2))
+        self.play(
+            Transform(graph, graph2),
+            Transform(eq, eq2),
+            *self.set_subtitles(
+                "Manipulating the first parameter changes the slope of the function."
+            ),
+            run_time=self.default_run_time,
+        )
 
         self.next_slide()
 
@@ -311,7 +405,9 @@ class Presentation(ThreeDSlide):
         )
         eq3.set_color_by_tex("1", YELLOW)
         eq3.set_color_by_tex("0.5", YELLOW)
-        self.play(Transform(graph, graph3), Transform(eq, eq3))
+        self.play(
+            Transform(graph, graph3), Transform(eq, eq3), run_time=self.default_run_time
+        )
 
         self.next_slide()
 
@@ -326,8 +422,14 @@ class Presentation(ThreeDSlide):
         )
         eq4.set_color_by_tex("2", YELLOW)
         eq4.set_color_by_tex("0.5", YELLOW)
-        self.play(Transform(graph, graph4), Transform(eq, eq4))
-
+        self.play(
+            Transform(graph, graph4),
+            Transform(eq, eq4),
+            *self.set_subtitles(
+                "Manipulating the second parameter moves the function up and down."
+            ),
+            run_time=self.default_run_time,
+        )
         self.next_slide()
 
         graph5 = plane.plot(lambda x: 0.5 * x - 1, color=WHITE)
@@ -341,7 +443,19 @@ class Presentation(ThreeDSlide):
         )
         eq5.set_color_by_tex("1", YELLOW)
         eq5.set_color_by_tex("0.5", YELLOW)
-        self.play(Transform(graph, graph5), Transform(eq, eq5))
+        self.play(
+            Transform(graph, graph5), Transform(eq, eq5), run_time=self.default_run_time
+        )
+
+        self.next_slide()
+
+        self.play(
+            *self.set_subtitles(
+                """Machine learning is simply letting the computer choose parameter values
+                  such that the resulting function is somehow useful.
+                  """
+            )
+        )
 
         self.cleanup_slide()
 
@@ -361,7 +475,12 @@ class Presentation(ThreeDSlide):
             y_range=(-1, 7),
             y_length=config.frame_height,
         )
-        self.play(Write(plane))
+        x_label = MathTex("T", font_size=40).to_corner(DR, buff=0.3)
+        y_label = MathTex("E", font_size=40).to_edge(UP, buff=0.3).shift(4.5 * LEFT)
+        self.play(Write(plane),
+                  *self.set_subtitles(r"Imagine we want to predict energy usage in our home\\based on the temperature outside."),
+                  run_time=self.long_run_time)
+        self.play(Write(x_label), Write(y_label))
 
         self.next_slide()
 
@@ -379,7 +498,13 @@ class Presentation(ThreeDSlide):
             dot = Dot().move_to(plane.coords_to_point(x, y, 0))
             dots.append(dot)
 
-        self.play(Create(dot) for dot in dots)
+        self.play(*[Create(dot) for dot in dots],
+                  *self.set_subtitles("We measure the temperature and resulting energy usage on a few days."),
+                  run_time=self.default_run_time)
+
+        self.next_slide()
+
+        self.play(*self.set_subtitles("If we want to predict the energy usage when the temperature is 20 degrees, we can draw a line through the data and measure its height when $T=20$."))
 
         self.next_slide()
 
@@ -387,15 +512,26 @@ class Presentation(ThreeDSlide):
         # TODO add a little equation on the top right of the screen
         # TODO add error function
         rand_line = plane.plot(lambda x: 0.1 * x + 0.5)
-        self.play(Create(rand_line))
+        self.play(Create(rand_line),
+                  *self.set_subtitles("First we choose random values for the parameters. This line obviously does not describe the data very well."),
+                  run_time=self.default_run_time
+                  )
+
+        self.next_slide()
+
+        self.play(*self.set_subtitles("The ``loss'' function $L$ describes the quality of the line. The higher the value for $L$, the worse the line."))
 
         self.next_slide()
 
         # TODO split animation: first fit slope, then intercept
         lm = linreg_univariate(x_points, y_points)
         reg_line = plane.plot(lambda x: lm.predict(np.array(x).reshape(-1, 1))[0])
-        self.play(Transform(rand_line, reg_line))
+        self.play(
+            Transform(rand_line, reg_line),
+            *self.set_subtitles("The computer searches for parameter values that minimize $L$, and now the line nicely goes through the data. This process is also called ``training''."),
+            run_time=self.default_run_time
 
+        )
         self.cleanup_slide()
 
     def construct_chapter1_5(self):
@@ -1547,8 +1683,8 @@ class Presentation(ThreeDSlide):
                 4: MathTex(r"f_3", color=BLACK),
                 5: MathTex(r"f_{1,3}", color=BLACK, font_size=35),
                 6: MathTex(r"f_{2,3}", color=BLACK, font_size=35),
-                7: MathTex(r"f_{1,2,3}", color=BLACK, font_size=25)
-            }
+                7: MathTex(r"f_{1,2,3}", color=BLACK, font_size=25),
+            },
         )
         self.play(Write(graph))
         self.cleanup_slide()
@@ -1568,21 +1704,43 @@ class Presentation(ThreeDSlide):
         self.next_slide()
         title = Text("Conclusion", font_size=50).shift(2 * UP)
         benchmark1 = Text("1. Benchmark:", font_size=30, color=BLUE).shift(4 * LEFT)
-        benchmark2 = Text("there is no universal measure of quality", font_size=30).next_to(benchmark1, RIGHT).align_to(benchmark1, UP)
+        benchmark2 = (
+            Text("there is no universal measure of quality", font_size=30)
+            .next_to(benchmark1, RIGHT)
+            .align_to(benchmark1, UP)
+        )
 
-        framework1 = Text("2. Framework: ", font_size=30, color=BLUE).next_to(benchmark1, DOWN).align_to(benchmark1, LEFT)
-        framework2 = Text("unifying removal-based attribution methods", font_size=30).align_to(benchmark2, LEFT).align_to(framework1, UP)
-        framework3 = Text("using functional decomposition", font_size=30).next_to(framework2, DOWN).align_to(benchmark2, LEFT)
+        framework1 = (
+            Text("2. Framework: ", font_size=30, color=BLUE)
+            .next_to(benchmark1, DOWN)
+            .align_to(benchmark1, LEFT)
+        )
+        framework2 = (
+            Text("unifying removal-based attribution methods", font_size=30)
+            .align_to(benchmark2, LEFT)
+            .align_to(framework1, UP)
+        )
+        framework3 = (
+            Text("using functional decomposition", font_size=30)
+            .next_to(framework2, DOWN)
+            .align_to(benchmark2, LEFT)
+        )
 
-        pddshap1 = Text(
-            "3. PDD-SHAP:",
-            font_size=30, color=BLUE).next_to(framework3, DOWN).align_to(framework1, LEFT)
-        pddshap2 = Text(
-            "fast approximation algorithm",
-            font_size=30).align_to(benchmark2, LEFT).align_to(pddshap1, UP)
-        pddshap3 = Text(
-            "for existing attributions",
-            font_size=30).next_to(pddshap2, DOWN).align_to(benchmark2, LEFT)
+        pddshap1 = (
+            Text("3. PDD-SHAP:", font_size=30, color=BLUE)
+            .next_to(framework3, DOWN)
+            .align_to(framework1, LEFT)
+        )
+        pddshap2 = (
+            Text("fast approximation algorithm", font_size=30)
+            .align_to(benchmark2, LEFT)
+            .align_to(pddshap1, UP)
+        )
+        pddshap3 = (
+            Text("for existing attributions", font_size=30)
+            .next_to(pddshap2, DOWN)
+            .align_to(benchmark2, LEFT)
+        )
 
         self.play(Write(title), run_time=1)
         self.next_slide()
@@ -1599,15 +1757,14 @@ class Presentation(ThreeDSlide):
 
         self.cleanup_slide()
 
-
     def construct(self):
         # self.construct_titleslide()
         # self.construct_toc_slide(chapter=1)
-        #
+
         # self.construct_chapter1_1()
         # self.construct_chapter1_2()
         # self.construct_chapter1_3()
-        # self.construct_chapter1_4()
+        self.construct_chapter1_4()
         # self.construct_chapter1_5()  # 3D SCENE
         # self.construct_chapter1_6()
         # self.construct_chapter1_7()
@@ -1642,5 +1799,5 @@ class Presentation(ThreeDSlide):
         # self.construct_chapter5_3()
         # self.construct_chapter5_4()
 
-        self.construct_toc_slide(chapter=6)
-        self.construct_conclusion()
+        # self.construct_toc_slide(chapter=6)
+        # self.construct_conclusion()

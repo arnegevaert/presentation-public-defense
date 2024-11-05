@@ -14,8 +14,27 @@ so you should be able to follow using the slides.
 
 ## Introductie: (8m15s)
 
+### Intro part 0
+Op 15 januari 2021 diende het volledige Nederlandse kabinet-Rutte 3 zijn ontslag in.
+De grootste reden voor het aftreden was de toeslagenaffaire,
+een groot schandaal waarbij duizenden burgers ten onrechte beschuldigd werden van fraude
+met toeslagen, een systeem binnen de Nederlandse sociale zekerheid.
+Achteraf bleek dat veel van deze valse beschuldigingen kwamen van
+een AI-algoritme dat op basis van persoonsgegevens probeerde te voorspellen
+of iemand "verdacht" was.
+Dit algoritme bleek op belangrijke manieren gebiased te zijn,
+met alle gevolgen van dien.
+
+Dit voorbeeld illustreert hoe belangrijk het is om de voorspellingen van AI-algoritmes
+te kunnen *verklaren.*
+Jammer genoeg zijn de meeste hedendaagse AI-algoritmes heel moeilijk te begrijpen.
+Daarom is Explainable AI, oftewel XAI, als onderzoeksveld in de laatste jaren enorm gegroeid.
+In dit doctoraat focus ik op een onderdeel van dit onderzoeksveld,
+namelijk *attributie-gebaseerde verklaringen.*
+
 ### Intro part 1 (1m30s)
-Om te beginnen, moeten we even terug naar iedereen zijn/haar favoriete plek en meest dierbare herinnering:
+Om te begrijpen wat attributie-gebaseerde verklaringen zijn,
+moeten we eerst even terug naar iedereen zijn/haar favoriete plek en meest dierbare herinnering:
 de wiskundeles in het derde middelbaar.
 Ik voel de spanning al een beetje toenemen in de zaal, maar er is geen reden om bang te zijn.
 Ik heb namelijk gemerkt dat de meeste mensen die een trauma hebben aan wiskunde
