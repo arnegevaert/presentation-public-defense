@@ -40,7 +40,7 @@ def parabolic_reg(x_points, y_points):
     feat = PolynomialFeatures(degree=2)
     lm = Pipeline(
         [
-            ("preproc", PolynomialFeatures(degree=2)),
+            ("preproc", PolynomialFeatures(degree=2, include_bias=False)),
             ("model", linear_model.LinearRegression()),
         ]
     )
@@ -55,7 +55,7 @@ def nn_reg(x_points, y_points):
             (
                 "predict",
                 MLPRegressor(
-                    alpha=1e-4, tol=1e-6, max_iter=int(1e6), hidden_layer_sizes=(25,)
+                    alpha=1e-4, tol=1e-6, max_iter=int(1e6), hidden_layer_sizes=(25,), random_state=0
                 ),
             ),
         ]

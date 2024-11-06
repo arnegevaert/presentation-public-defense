@@ -492,11 +492,14 @@ In mijn doctoraat heb ik nu wiskundig kunnen bewijzen
 dat tientallen attributiemethodes die in de laatste 10 a 15 jaar zijn uitgevonden,
 allemaal door andere mensen en met andere redeneringen erachter,
 allemaal gewoon te schrijven zijn als deze formule.
-Dat maakt al die methodes plots enorm veel makkelijker om te vergelijken:
-als we twee methodes met elkaar vergelijken,
-moeten we dus gewoon de 3 kenmerkende eigenschappen van die methodes naast elkaar leggen.
-
-- [ ] Hier explicieter maken: LIME vs een andere methode, allemaal toch hetzelfde.
+Dat is opmerkelijk, omdat al die methodes op compleet andere manieren uitgevonden zijn.
+De ene methode traint een nieuw lineair model in de omgeving van een punt,
+de andere is geinspireerd op cooperatieve speltheorie,
+nog een andere is weer gebaseerd op een andere branche van de wiskunde, ...
+Al die methodes zijn nu plots enorm veel makkelijker om te vergelijken:
+In plaats van de hele theorie te begrijpen waar 2 verschillende methodes op gebouwd zijn,
+kunnen we ze gewoon vergelijken
+door de 3 kenmerkende eigenschappen naast elkaar te leggen.
 
 ## Functional decomposition (6m00s)
 
@@ -574,6 +577,7 @@ Nu blijkt dat iedere functie die je kan verzinnen op een gelijkaardige manier ge
 in een som van zo'n kleinere deelfuncties.
 Ik geef die decompositie hier schematisch weer: dit is het directe effect van x1,
 dit is het interactie-effect tussen x1 en x2, enzovoort.
+
 Daarnet heb ik nog uitgelegd dat,
 om een attributiemethode te ontwerpen,
 we een manier moeten kiezen om variabelen te verwijderen uit een model.
@@ -732,7 +736,3 @@ zodat die attributies veel sneller berekend kunnen worden.
 
 Dan wil ik u alleen nog bedanken voor uw aandacht.
 
-## Notes
-- [ ] Use arrays in MathTex to make animations better
-- [ ] Use DecimalNumber for learning animations
-- [ ] Mention toeslagenaffaire in very beginning as a use case of XAI necessity
