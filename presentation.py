@@ -1771,7 +1771,12 @@ class Presentation(ThreeDSlide):
                 "In my PhD, I showed that a large selection of attribution methods can be summarized using these three ingredients."
             ),
         )
-        self.play(Write(p), run_time=6)
+        self.play(Write(p[0]), run_time=self.long_run_time)
+        self.next_slide()
+        self.play(Write(p[1]), run_time=self.long_run_time)
+        self.next_slide()
+        self.play(Write(p[2]), run_time=self.long_run_time)
+        self.next_slide()
 
         self.cleanup_slide()
 
@@ -2203,7 +2208,7 @@ class Presentation(ThreeDSlide):
         self.next_slide()
         self.play(
             *self.set_subtitles(
-                "The specific decomposition depends entirely on how we \textit{remove} input variables."
+                r"The specific decomposition depends entirely on how we \textit{remove} input variables."
             )
         )
         self.cleanup_slide()
@@ -2275,7 +2280,7 @@ class Presentation(ThreeDSlide):
         self.next_slide()
         decomp = Tex(
             r"\item Target: what to explain\vspace{-0.5em}",
-            r"\item Decomposition: How to decompose the function\vspace{-0.5em}",
+            r"\item Decomposition: how to decompose the function\vspace{-0.5em}",
             r"\item Aggregation: how to summarize effects\vspace{-0.5em}",
             tex_environment="enumerate", font_size=50).to_edge(LEFT, buff=1)
         self.play(
@@ -2538,3 +2543,5 @@ class Presentation(ThreeDSlide):
 
         # TODO: check runtime of all self.play() calls
         # TODO: replace parameter searching animation using DecimalNumber
+
+        # TODO: Check 3.2

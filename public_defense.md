@@ -1,5 +1,12 @@
 # Public defense
 
+Timing:
+- Preamble + intro: 12m10s
+- Benchmark: 6m30s
+- RBAM: 12m30s
+- FD: 8m00s
+- PDDSHAP + conclusion: 7m30s
+
 ## Preamble: (0m45s)
 Voor we beginnen een kleine dienstmededeling: de presentatie gaat volledig in het Nederlands zijn,
 maar de slides zijn in het Engels, zodat de Engelstaligen onder ons ook kunnen volgen.
